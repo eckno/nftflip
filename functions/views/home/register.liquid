@@ -1,0 +1,110 @@
+ {% include 'partials/header.liquid' %}
+ {% include 'partials/topbar.liquid' %}
+ <!-- content begin -->
+ <div class="no-bottom no-top" id="content">
+    <div id="top"></div>
+    
+    <!-- section begin -->
+    <section id="subheader" class="text-light reg" data-bgimage="url(images/background/subheader-dark.jpg) top">
+            <div class="center-y relative text-center">
+                <div class="container">
+                    <div class="row">
+                        
+                        <div class="col-md-12 text-center">
+                            <h1>Register</h1>
+                            <p>What are you still waiting for ? Create your account and start earning.</p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- section close -->
+    
+
+    <section aria-label="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <h3>Don't have an account? Register now.</h3>
+                    <p>I don't want to hear a single person saying they can't make money in this new age. There are 18 year olds that are investing and fliping NFT'S and making $80k a week.</p>
+                    
+                    <div class="spacer-10"></div>
+                    
+                    <form name="registration_form" id='registration_form' class="form-border" method="post" action='#'>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Name:</label>
+                                    <input type='text' name='name' id='name' class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Email Address:</label>
+                                    <input type='email' name='email' id='email' required class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Choose a Username:</label>
+                                    <input type='text' name='username' required id='username' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Phone:</label>
+                                    <input type='number' required name='phone' id='phone' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Password:</label>
+                                    <input type='password' required name='password' id='password' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="field-set">
+                                    <label>Re-enter Password:</label>
+                                    <input type='password' required name='re-password' id='re-password' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="field-set">
+                                    <label>Referral Id</label>
+                                    <input type='text' name='rid' id='rid' class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+
+                                <div id='submit' class="pull-left">
+                                    <input type='submit' id='regbtn' value='Register Now' class="btn btn-main color-2">
+                                </div>
+
+                                <div id='mail_success' class='success'>Your message has been sent successfully.</div>
+                                <div id='mail_fail' class='error'>Sorry, error occured this time sending your message.</div>
+                                <div class="clearfix"></div>
+
+                            </div>
+
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    
+</div>
+<!-- content close -->
+{% include 'partials/footer.liquid' %}
