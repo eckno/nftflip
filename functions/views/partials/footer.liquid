@@ -47,6 +47,11 @@
     <script src="js/jquery.lazy.min.js"></script>
     <script src="js/jquery.lazy.plugins.min.js"></script>
     <script src="js/designesia.js"></script>
+    {% if footer_scripts %}
+    {% for script in footer_scripts %}
+    <script src="{{script}}"></script>
+    {% endfor %}
+    {% endif %}
         
 
 		
