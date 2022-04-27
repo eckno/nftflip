@@ -21,21 +21,52 @@ class indexController extends baseController
     //
     async loginController(req, res){
         //
-        console.log("Check 1" + req.method);
+        
         if(req.method === "POST"){
-            console.log("Check 2" + req);
-            //
+           
             const post = baseController.sanitizeRequestData(req.body);
             //
             if(!filter_var(_.trim(post["email"]), "FILTER_VALIDATE_EMAIL") || !isString(post["email"])){
                 return baseController.sendFailResponse(res, "Invalid email address!!");
             }
+            //
+            const user  = await auth.getUserByEmail(post['email']).then((user) => {
+                if(user){
+                    return user;
+                }
+                else{
+                    return "There is no user record corresponding to the provided identifier."
+                }
+            }).catch(() => {
+                return "There is no user record corresponding to the provided identifier."
+            });
+            if(user.email && user.email != ""){
+                //
+                const userData = await db.collection("members").doc(user.uid).get();
+                //
+                if(!userData.exists){
+                    return baseController.sendFailResponse(res, "Error: User data not found, please contact support");
+                }
+                console.log(userData.data());
+            }
+            else
+            {
+                //
+                return baseController.sendFailResponse(res, user);
+            }
         }
         else
         {
             try{
+                const base = new baseController();
+                //base.send_email();
                 //
-                return res.render("home/login", {title: 'Secure Login'});
+                return res.render("home/login", {
+                    title: 'Secure Login',
+                    footer_scripts: [
+                        "js/app/login.js"
+                    ]
+                });
             }
             catch(e){
                 //
@@ -66,6 +97,8 @@ class indexController extends baseController
                     phone: post['phone'],
                     auth: post['password'],
                     refid: post['refid'],
+                    emailValidationToken: uuidv4(),
+                    emailValidated: false,
                     regOn: Date()
                 }
                 const isuser = await auth.createUser({

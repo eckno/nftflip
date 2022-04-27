@@ -24,5 +24,9 @@ router.post(REGISTERATION, async (req, res) => {
     return controller.registerController(req, res);
 });
 
+router.post(LOGIN, async (req, res) => {
+    return controller.loginController(req, res);
+});
+
 
 module.exports = router;
