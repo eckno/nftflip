@@ -3467,6 +3467,8 @@ hr {
 }
 
 .form-border input[type=text],
+.form-border input[type=email],
+.form-border input[type=number],
 .form-border textarea,
 .form-underline input[type=email],
 .form-border input[type=password],
@@ -3490,6 +3492,8 @@ hr {
 .dark-scheme .form-border input[type=text],
 .dark-scheme .form-border textarea,
 .dark-scheme .form-underline input[type=email],
+.form-border input[type=email],
+.form-border input[type=number],
 .dark-scheme .form-border input[type=password],
 .dark-scheme .form-border input[type=date],
 .dark-scheme .form-border select {

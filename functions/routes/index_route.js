@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {LANDING_PAGE, LOGIN, REGISTERATION} = require("../lib/index-routes");
+const {LANDING_PAGE, LOGIN, REGISTERATION, EMAIL} = require("../lib/index-routes");
 
 
 //
@@ -14,6 +14,10 @@ router.get(LOGIN, async (req, res) => {
 
 router.get(REGISTERATION, async (req, res) => {
     res.render("home/register", {title: 'User account setup'});
+});
+
+router.get(EMAIL, async(req, res) => {
+    res.render("email", { title: 'email' });
 });
 
 
