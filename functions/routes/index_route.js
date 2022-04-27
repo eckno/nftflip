@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
+<<<<<<< HEAD
+const {LANDING_PAGE, LOGIN, REGISTERATION, EMAIL} = require("../lib/index-routes");
+=======
 const indexController = require("../controller/index");
 const {LANDING_PAGE, LOGIN, REGISTERATION} = require("../lib/index-routes");
 const controller = new indexController();
+>>>>>>> 7935a1a5747560c05532765c404c2b11663bb2fb
 
 
 //
@@ -24,8 +28,13 @@ router.post(REGISTERATION, async (req, res) => {
     return controller.registerController(req, res);
 });
 
+<<<<<<< HEAD
 router.post(LOGIN, async (req, res) => {
     return controller.loginController(req, res);
+=======
+router.get(EMAIL, async(req, res) => {
+    res.render("email", { title: 'email' });
+>>>>>>> 3cf30a38d350871d644d0a2ad4815758da7213cb
 });
 
 
