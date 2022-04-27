@@ -28,7 +28,9 @@
                 <div class="col-md-8 offset-md-2">
                     <h3>Don't have an account? Register now.</h3>
                     <p>I don't want to hear a single person saying they can't make money in this new age. There are 18 year olds that are investing and fliping NFT'S and making $80k a week.</p>
-                    
+                    <div class="alert alert-success" id="msgsus" style="display: none;">
+                        
+                    </div>
                     <div class="spacer-10"></div>
                     
                     <form name="registration_form" id='registration_form' class="form-border" method="post" action='#'>
@@ -59,7 +61,8 @@
                             <div class="col-md-6">
                                 <div class="field-set">
                                     <label>Phone:</label>
-                                    <input type='number' required name='phone' id='phone' class="form-control">
+                                    <input type='tel' required name='phone' id='phone' class="form-control">
+                                    <div style="color: orange;">Phone number must start with country code (e.g: +1342xxxx)</div>
                                 </div>
                             </div>
 
@@ -83,9 +86,7 @@
                                     <input type='text' name='rid' id='rid' class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                 <a href="/email"> emails testing</a>
-                            </div>
+                          
 
                             <div class="col-md-12">
 
