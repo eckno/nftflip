@@ -1,0 +1,102 @@
+body {
+    -webkit-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    -webkit-font-smoothing: antialiased !important;
+    }
+    img {
+    border: 0 !important;
+    outline: none !important;
+    }
+    p {
+    Margin: 0px !important;
+    Padding: 0px !important;
+    }
+    table {
+    border-collapse: collapse;
+    mso-table-lspace: 0px;
+    mso-table-rspace: 0px;
+    }
+    td, a, span {
+    border-collapse: collapse;
+    mso-line-height-rule: exactly;
+    }
+    .ExternalClass * {
+    line-height: 100%;
+    }
+    span.MsoHyperlink {
+    mso-style-priority:99;
+    color:inherit;}
+    span.MsoHyperlinkFollowed {
+    mso-style-priority:99;
+    color:inherit;
+}
+
+@media only screen and (min-width:481px) and (max-width:599px) {
+table[class=em_main_table] {
+width: 100% !important;
+}
+table[class=em_wrapper] {
+width: 100% !important;
+}
+td[class=em_hide], br[class=em_hide] {
+display: none !important;
+}
+img[class=em_full_img] {
+width: 100% !important;
+height: auto !important;
+}
+td[class=em_align_cent] {
+text-align: center !important;
+}
+td[class=em_aside]{
+padding-left:10px !important;
+padding-right:10px !important;
+}
+td[class=em_height]{
+height: 20px !important;
+}
+td[class=em_font]{
+font-size:14px !important;	
+}
+td[class=em_align_cent1] {
+text-align: center !important;
+padding-bottom: 10px !important;
+}
+
+
+@media only screen and (max-width:480px) {
+table[class=em_main_table] {
+width: 100% !important;
+}
+table[class=em_wrapper] {
+width: 100% !important;
+}
+td[class=em_hide], br[class=em_hide], span[class=em_hide] {
+display: none !important;
+}
+img[class=em_full_img] {
+width: 100% !important;
+height: auto !important;
+}
+td[class=em_align_cent] {
+text-align: center !important;
+}
+td[class=em_align_cent1] {
+text-align: center !important;
+padding-bottom: 10px !important;
+}
+td[class=em_height]{
+height: 20px !important;
+}
+td[class=em_aside]{
+padding-left:10px !important;
+padding-right:10px !important;
+} 
+td[class=em_font]{
+font-size:14px !important;
+line-height:28px !important;
+}
+span[class=em_br]{
+display:block !important;
+}
+}
