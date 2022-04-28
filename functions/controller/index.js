@@ -4,6 +4,9 @@ const firebase = require("firebase-admin");
 const { v4: uuidv4 } = require('uuid');
 const _ = require('lodash');
 const {empty, filter_var, isString} = require("../lib/utils/utils");
+const emailTemp = require("../lib/email-temps");
+const jwt = require('jsonwebtoken');
+const {LocalStorage} = require("node-localstorage");
 
 //inits
 const firebaseApp = firebase.initializeApp(functions.config().firebase);
@@ -47,7 +50,32 @@ class indexController extends baseController
                 if(!userData.exists){
                     return baseController.sendFailResponse(res, "Error: User data not found, please contact support");
                 }
-                console.log(userData.data());
+                //
+                if(userData.data().auth != post['password']){
+                    return baseController.sendFailResponse(res, "Incorrect email address or password!!");
+                }else
+                if(userData.data().emailValidated === false){
+                    return baseController.sendFailResponse(res, "Please check for the verification email sent to you to verify and setup your account.")
+                }
+                else{
+                    const sessionData = {
+                        uid: userData.data().uid,
+                        name: userData.data().fname,
+                        number: userData.data().phone,
+                        email: userData.data().email
+                    }
+                    //
+                    const createdToken = jwt.sign(sessionData, uuid, { expiresIn: '1h' });
+                    //
+                    const localStorage = new LocalStorage("./token");
+                    localStorage.setItem("Token", createdToken);
+                    //
+                    return baseController.sendSuccessResponse(res, {
+                        redirectURL: "/dashboard",
+                        success: true
+                    })
+                }
+                //console.log(userData.data().auth );
             }
             else
             {
@@ -59,7 +87,7 @@ class indexController extends baseController
         {
             try{
                 const base = new baseController();
-                //base.send_email();
+                //base.send_email("Welcome to nftflip", "jessefamous29@gmail.com");
                 //
                 return res.render("home/login", {
                     title: 'Secure Login',
@@ -116,11 +144,13 @@ class indexController extends baseController
                 ///
                 if(!empty(isuser) && !empty(isuser.uid)){
                     //
+                    const base = new baseController();
+                    base.send_email("Welcome To Nftflip", userCredentials.email, emailTemp.welcome_mail(userCredentials.fname, isuser.emailValidationToken));
                     return baseController.sendSuccessResponse(res, isuser);
                 }
                 else
                 {
-                    return baseController.sendFailResponse(res, "Oops! Something went wrong, kindly try again or contact admin for assistance.");
+                    return baseController.sendFailResponse(res, isuser['message']);
                 }
             }
             catch (err){
