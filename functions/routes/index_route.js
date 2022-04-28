@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const {LANDING_PAGE, LOGIN, REGISTERATION, EMAIL} = require("../lib/index-routes");
 const indexController = require("../controller/index");
-const {LANDING_PAGE, LOGIN, REGISTERATION} = require("../lib/index-routes");
 const controller = new indexController();
 
 
@@ -22,8 +22,8 @@ router.post(REGISTERATION, async (req, res) => {
     return controller.registerController(req, res);
 });
 
-router.get(EMAIL, async(req, res) => {
-    res.render("email", { title: 'email' });
+router.post(LOGIN, async (req, res) => {
+    return controller.loginController(req, res);
 });
 
 
