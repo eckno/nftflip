@@ -176,6 +176,56 @@ class indexController extends baseController
             }
         }
     }
+
+    async accountConfirmation(req, res)
+    {
+        if(req.method == "POST"){
+            const post = baseController.sanitizeRequestData(req.body);
+            console.log("request ", post['pin']);
+            if(!empty(post['pin']) && !empty(post['uid'])){
+                //
+                const result = await db.collection("members").doc(post['uid']).update({
+                    emailValidated: true,
+                    accountPin: post['pin']
+                }).catch((e) => {return false;});
+                //
+                if(!empty(result) && result !== false){
+                    return baseController.sendSuccessResponse(res, result);
+                }
+                return baseController.sendFailResponse(res, "Account confirmation failed. Please contact support. 1");
+            }
+            else
+            {
+                return baseController.sendFailResponse(res, "Account confirmation failed. Please contact support. 2");
+            }
+        }else{
+            res.render("home/verify", {
+                title: "Verify Account",
+                footer_scripts: [
+                    "js/app/confirm.js"
+                ],
+                uid: req.userData.uid
+            });
+        }
+    }
+
+    async verifyUser(token)
+    {
+        const checkUser = await db.collection("members").where("emailValidationToken", "==", token).get()
+        .then((docs) => {
+            return docs;
+        })
+        .catch((e) => {
+            return false;
+        });
+        
+        if(checkUser.empty){
+            return false;
+        }
+        else {
+            return checkUser;
+        }
+    }
 }
 
 
