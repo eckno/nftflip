@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {LANDING_PAGE, LOGIN, REGISTERATION, EMAIL} = require("../lib/index-routes");
 const {LANDING_PAGE, LOGIN, REGISTERATION, VERIFICATION} = require("../lib/index-routes");
 const indexController = require("../controller/index");
 const controller = new indexController();
