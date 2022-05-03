@@ -341,6 +341,7 @@ class emailTemplates
         //
         return getPage;
     }
+    
 }
 
 module.exports = emailTemplates;

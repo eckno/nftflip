@@ -1,0 +1,46 @@
+{% include 'partials/header.liquid' %}
+{% include 'partials/topbar.liquid' %}
+<!-- content begin -->
+<div class="no-bottom no-top" id="content">
+    <div id="top"></div>
+    
+    <section class="full-height relative no-top no-bottom vertical-center" data-bgimage="url(images/background/subheader-dark.jpg) top" data-stellar-background-ratio=".5">
+        <div class="overlay-gradient t50">
+            <div class="center-y relative">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5 text-light wow fadeInRight" data-wow-delay=".5s">
+                        <div class="spacer-10"></div>
+                        <h1>Trade, Bid or Flip digital items.</h1>
+                        <p class="lead">Invest In Your Dream: There are literally 18year olds fliping NFT's and making $80,000+ a week. What's your excuse?</p>
+                    </div>
+                        
+                        <div class="col-lg-4 offset-lg-2 wow fadeIn" data-wow-delay=".5s">
+                            <div class="box-rounded padding40" data-bgcolor="#21273e">
+                                <h3 class="mb10">Account Confirmation</h3>
+                                <p style="color: orange;">Kindly setup a 4 - 6 digit account pin to secure your account from unauthorized access to your funds and assets.</p>
+                                <form name="confirmForm" id='confirmForm' class="form-border"  action=''>
+                                    <input type="hidden" name="uid" value="{{ uid }}" id="uid">
+                                     <div class="field-set">
+                                        <input type='password' name='password' id='password' class="form-control" placeholder="4 or 6 digit account">
+                                    </div>
+                                    
+                                    <div class="field-set">
+                                        <input type='submit' id='submitbtn' value='Verify Account' class="btn btn-main btn-fullwidth color-2">
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
+                                    
+                                    <div class="spacer-single"></div>
+                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>		
+    
+    </div>
+    <!-- content close -->
+    {% include 'partials/footer.liquid' %}
