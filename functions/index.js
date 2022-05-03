@@ -21,6 +21,7 @@ app.engine("liquid", engine.express());
 app.set('view engine', 'liquid');
 //
 app.use(indexRout, require("./routes/index_route"));
+app.use(indexRout, require("./routes/index_route"));
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //

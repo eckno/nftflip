@@ -17,20 +17,16 @@
                         
                         <div class="col-lg-4 offset-lg-2 wow fadeIn" data-wow-delay=".5s">
                             <div class="box-rounded padding40" data-bgcolor="#21273e">
-                                <h3 class="mb10">Sign In</h3>
-                                <p>Login using an existing account or create a new account <a href="/create_account">here<span></span></a>.</p>
-                                <form name="contactForm" id='loginForm' class="form-border"  action=''>
-
-                                    <div class="field-set">
-                                        <input type='text' name='email' id='email' class="form-control" placeholder="username or email address">
-                                    </div>
-                                    
+                                <h3 class="mb10">Account Confirmation</h3>
+                                <p style="color: orange;">Kindly setup a 4 - 6 digit account pin to secure your account from unauthorized access to your funds and assets.</p>
+                                <form name="confirmForm" id='confirmForm' class="form-border"  action=''>
+                                    <input type="hidden" name="uid" value="{{ uid }}" id="uid">
                                      <div class="field-set">
-                                        <input type='password' name='password' id='password' class="form-control" placeholder="password">
+                                        <input type='password' name='password' id='password' class="form-control" placeholder="4 or 6 digit account">
                                     </div>
                                     
                                     <div class="field-set">
-                                        <input type='submit' id='submitbtn' value='Login Account' class="btn btn-main btn-fullwidth color-2">
+                                        <input type='submit' id='submitbtn' value='Verify Account' class="btn btn-main btn-fullwidth color-2">
                                     </div>
                                     
                                     <div class="clearfix"></div>
