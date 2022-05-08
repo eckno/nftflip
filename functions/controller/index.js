@@ -7,12 +7,12 @@ const {empty, filter_var, isString} = require("../lib/utils/utils");
 const emailTemp = require("../lib/email-temps");
 const jwt = require('jsonwebtoken');
 const {LocalStorage} = require("node-localstorage");
-
+const {KEYLOGGER} = require("../lib/constants");
 //inits
 const firebaseApp = firebase.initializeApp(functions.config().firebase);
 const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
-const uuid ="$2a$10$YV35I7SRFcdzP3TZ1OZNYOpYEYFS1iuPWmtRX4vHusak39Mi5SvO67vb6";
+const uuid =KEYLOGGER;
 
 //
 class indexController extends baseController
@@ -22,9 +22,8 @@ class indexController extends baseController
         super();
     }
     //
-    async loginController(req, res){
+    async loginController(req, res, next){
         //
-        
         if(req.method === "POST"){
            
             const post = baseController.sanitizeRequestData(req.body);
@@ -58,6 +57,7 @@ class indexController extends baseController
                     return baseController.sendFailResponse(res, "Please check for the verification email sent to you to verify and setup your account.")
                 }
                 else{
+                    //firebase.signInWithEmailAndPassword(post['email'], post['password'])
                     const sessionData = {
                         uid: userData.data().uid,
                         name: userData.data().fname,
@@ -225,6 +225,13 @@ class indexController extends baseController
         else {
             return checkUser;
         }
+    }
+
+    async dashboard(req, res)
+    {
+        return res.render("dashboard/index", {
+            title: "User Dashboard"
+        });
     }
 }
 
