@@ -25,7 +25,7 @@ class indexController extends baseController
     async loginController(req, res, next){
         //
         if(req.method === "POST"){
-           
+            
             const post = baseController.sanitizeRequestData(req.body);
             //
             if(!filter_var(_.trim(post["email"]), "FILTER_VALIDATE_EMAIL") || !isString(post["email"])){
@@ -181,7 +181,6 @@ class indexController extends baseController
     {
         if(req.method == "POST"){
             const post = baseController.sanitizeRequestData(req.body);
-            console.log("request ", post['pin']);
             if(!empty(post['pin']) && !empty(post['uid'])){
                 //
                 const result = await db.collection("members").doc(post['uid']).update({
@@ -229,9 +228,14 @@ class indexController extends baseController
 
     async dashboard(req, res)
     {
-        return res.render("dashboard/index", {
-            title: "User Dashboard"
-        });
+        if(!empty(req.getUser))
+        {
+            return req.getUser;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 
