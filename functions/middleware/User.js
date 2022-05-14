@@ -8,29 +8,33 @@ const {KEYLOGGER} = require("../lib/constants");
 //
 const authUser = async (req, res, next) => {
     //
-    const localStorage = new LocalStorage("./token");
-    const token = localStorage.getItem("Token");
-    //
-   
-    if(token && !empty(token)){
-    //
-        const verify = await jwt.verify(token, KEYLOGGER);
+    try{
+        const localStorage = new LocalStorage("./token");
+        const token = localStorage.getItem("Token");
         //
-        console.log("verify ", verify);
-        if(!empty(verify) && verify['loggedin'] === true){
-            req.getUser = verify;
+        
+        if(token && !empty(token)){
+        //
+            const verify = await jwt.verify(token, KEYLOGGER);
             //
-            next();
+            if(!empty(verify) && !empty(verify['uid'])){
+                req.getUser = verify;
+                //
+                next();
+            }
+            else
+            {
+                res.redirect("/login");
+            }
+
         }
         else
         {
-            res.redirect(ROUTE_LOGIN);
+            res.redirect("/login");
         }
-
     }
-    else
-    {
-        res.redirect(ROUTE_LOGIN);
+    catch(e){
+        res.redirect("/login");
     }
 }
 
