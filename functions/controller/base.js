@@ -56,6 +56,13 @@ class BaseController {
 		return data;
 	}
 
+	static setUserSession(req, session_data) {
+		if (req && session_data) {
+			req.session.users = {...req.session.users, ...session_data};
+			req.session.save();
+		}
+	}
+
 	//
 	async send_email(subj, to_, template)
 	{

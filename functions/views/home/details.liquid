@@ -1,0 +1,82 @@
+{% include 'partials/header.liquid' %}
+{% include 'partials/topbar.liquid' %}
+<!-- content begin -->
+<div class="no-bottom no-top" id="content">
+    <div id="top"></div>
+    
+    <section aria-label="section" class="mt90 sm-mt-0">
+        {% if nfts %}
+         {% for nft in nfts %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="{{nft.nftUrl}}" class="img-fluid img-rounded mb-sm-30" alt="">
+                </div>
+                <div class="col-md-6">
+                    <div class="item_info">
+                        Auctions ends in <div class="de_countdown" data-year="2022" data-month="5" data-day="16" data-hour="8"></div>
+                        <h2>{{nft.name}} #{{randomint}}</h2>
+                        <div class="item_info_counts">
+                            <div class="item_info_type"><i class="fa fa-image"></i>Art</div>
+                            <div class="item_info_views"><i class="fa fa-eye"></i>250</div>
+                            <div class="item_info_like"><i class="fa fa-heart"></i>{{nft.like}}</div>
+                        </div>
+                        <p>{{ nft.description }}</p>
+
+                        <div class="d-flex flex-row">
+                           
+                            <div>
+                                <h6>Collection</h6>
+                                <div class="item_author">                                    
+                                    <div class="author_list_pp">
+                                        <a href="javascript:void(0)">
+                                            <img class="lazy" src="{{nft.nftUrl}}" alt="">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                    </div>                                    
+                                    <div class="author_list_info">
+                                        <a href="javascript:void()">{{nft.name}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="spacer-40"></div>
+
+                        <div class="de_tab tab_simple">
+
+                        <ul class="de_nav">
+                            <li class="active"><span>Details</span></li>
+                            <li><span>Bids</span></li>
+                            <li><span>History</span></li>
+                        </ul>
+
+                        <div class="spacer-10"></div>
+
+                        <h6>Price</h6>
+                        <div class="nft-item-price"><img src="images/misc/ethereum.svg" alt=""><span>{{nft.bid}}</span>(Bid Duration: {{nft.duration}})</div>
+
+                        <!-- Button trigger modal -->
+                        <a href="/login" class="btn-main btn-lg" data-bs-toggle="modal" data-bs-target="#buy_now">
+                          Place a Bid
+                        </a>
+                        &nbsp;
+                        <a href="/create_account" class="btn-main btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#place_a_bid">
+                          Create Account
+                        </a>
+                        
+                    </div>
+                        
+                    </div>
+                </div>
+            </div>
+        
+            {% endfor %}
+            {% endif %}
+        
+        </div>
+    </section>	
+    
+    </div>
+    <!-- content close -->
+    {% include 'partials/footer.liquid' %}

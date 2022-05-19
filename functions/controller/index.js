@@ -1,20 +1,22 @@
 const functions = require("firebase-functions");
 const baseController = require("./base");
-const firebase = require("firebase-admin");
+const admin = require("firebase-admin");
 const { v4: uuidv4 } = require('uuid');
 const _ = require('lodash');
 const {empty, filter_var, isString} = require("../lib/utils/utils");
 const emailTemp = require("../lib/email-temps");
 const jwt = require('jsonwebtoken');
-const {LocalStorage} = require("node-localstorage");
 const {KEYLOGGER} = require("../lib/constants");
-//inits
-const firebaseApp = firebase.initializeApp(functions.config().firebase);
+const serviceAccount = require("../lib/nftflip-fd13a-firebase-adminsdk-c4o7r-aff5fe5465.json");
+
+
+//nftflip@nftflip.iam.gserviceaccount.com
+const firebaseApp = admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
 const db = firebaseApp.firestore();
 const auth = firebaseApp.auth();
-const uuid =KEYLOGGER;
 
-//
 class indexController extends baseController
 {
     constructor()
@@ -22,7 +24,18 @@ class indexController extends baseController
         super();
     }
     //
-    async loginController(req, res, next){
+    async landing(req, res)
+    {
+        let nft_list = {};
+        const nfts = await db.collection("nfts").get();
+        nft_list = nfts.docs.map(doc => doc.data());
+        return res.render("index", {
+            title: 'Welcome to NFTFLIP TRADE || No.1 NFT Bidding platform',
+            nfts: nft_list
+        });
+    }
+
+    async loginController(req, res){
         //
         if(req.method === "POST"){
             
@@ -54,28 +67,37 @@ class indexController extends baseController
                     return baseController.sendFailResponse(res, "Incorrect email address or password!!");
                 }else
                 if(userData.data().emailValidated === false){
+                    baseController.send_email("NFTLIP TRADE account validation", userData.data().email, emailTemp.welcome_mail(userData.data().fname, userData.data().emailValidationToken));
                     return baseController.sendFailResponse(res, "Please check for the verification email sent to you to verify and setup your account.")
                 }
                 else{
-                    //firebase.signInWithEmailAndPassword(post['email'], post['password'])
-                    const sessionData = {
-                        uid: userData.data().uid,
-                        name: userData.data().fname,
-                        number: userData.data().phone,
+                    const uid = userData.data().uid;
+                    const additionalClaim = {
+                        uid,
+                        role: userData.data().role,
                         email: userData.data().email
                     }
                     //
-                    const createdToken = jwt.sign(sessionData, uuid, { expiresIn: '1h' });
+                    
+                    const createdToken = jwt.sign(additionalClaim, KEYLOGGER);
+                        if(!empty(createdToken) && isString(createdToken))
+                        {
+                            // console.log(createdToken);
+                            const sessionData = {
+                                token: createdToken
+                            }
+                            baseController.setUserSession(req, sessionData);
+                              return baseController.sendSuccessResponse(res, {
+                                redirectURL: `/dashboard?token=${createdToken}`,
+                                success: true
+                            })
+                        }
+                        else{
+                            return baseController.sendFailResponse(res, "Oops! Something went wrong please try again later.");
+                        }
                     //
-                    const localStorage = new LocalStorage("./token");
-                    localStorage.setItem("Token", createdToken);
-                    //
-                    return baseController.sendSuccessResponse(res, {
-                        redirectURL: "/dashboard",
-                        success: true
-                    })
+                    
                 }
-                //console.log(userData.data().auth );
             }
             else
             {
@@ -86,8 +108,6 @@ class indexController extends baseController
         else
         {
             try{
-                const base = new baseController();
-                //base.send_email("Welcome to nftflip", "jessefamous29@gmail.com");
                 //
                 return res.render("home/login", {
                     title: 'Secure Login',
@@ -145,7 +165,7 @@ class indexController extends baseController
                 if(!empty(isuser) && !empty(isuser.uid)){
                     //
                     const base = new baseController();
-                    base.send_email("Welcome To Nftflip", userCredentials.email, emailTemp.welcome_mail(userCredentials.fname, isuser.emailValidationToken));
+                    base.send_email("Welcome To Nftflip Trade", userCredentials.email, emailTemp.welcome_mail(userCredentials.fname, isuser.emailValidationToken));
                     return baseController.sendSuccessResponse(res, isuser);
                 }
                 else
@@ -224,6 +244,30 @@ class indexController extends baseController
         else {
             return checkUser;
         }
+    }
+
+    async tokenValidator(token){
+        const result = await auth.verifyIdToken(token);
+        return result;
+    }
+
+    async bidDetails(req, res)
+    {
+        let nft_details = {};
+        const nfts = await db.collection("nfts").where("nftid", "==", req.query.id).get();
+        
+        if(nfts.empty == true){
+            return res.redirect("/");
+        }
+        
+        nft_details = nfts.docs.map(doc => doc.data());
+        
+        return res.render("home/details", {
+            title: `${nft_details[0].name} || No.1 NFT Bidding platform`,
+            nfts: nft_details,
+            randomint: 234
+            
+        });
     }
 
     async dashboard(req, res)
