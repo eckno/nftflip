@@ -1,39 +1,31 @@
-//
 const {empty} = require("../lib/utils/utils");
-const {LocalStorage} = require("node-localstorage");
 const jwt = require("jsonwebtoken");
-const { ROUTE_LOGIN } = require("../lib/index-routes");
 const {KEYLOGGER} = require("../lib/constants");
 
 //
 const authUser = async (req, res, next) => {
     //
-    try{
-        const localStorage = new LocalStorage("./token");
-        const token = localStorage.getItem("Token");
+    if(req.query && !empty(req.query.token)){
         //
-        
-        if(token && !empty(token)){
-        //
-            const verify = await jwt.verify(token, KEYLOGGER);
-            //
-            if(!empty(verify) && !empty(verify['uid'])){
-                req.getUser = verify;
+        try{
+            const tokenResult = await jwt.verify(req.query.token, KEYLOGGER);
+            
+            if(!empty(tokenResult) && !empty(tokenResult['uid'])){
+
+                req.getUser = tokenResult;
                 //
                 next();
             }
-            else
-            {
+            else{
                 res.redirect("/login");
-            }
-
+             }
         }
-        else
-        {
+        catch(e){
             res.redirect("/login");
         }
+        
     }
-    catch(e){
+    else{
         res.redirect("/login");
     }
 }

@@ -5,21 +5,24 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const indexRout = require("./routes/index_route");
 const session = require("express-session");
+const RedisStore = require('connect-redis')(session);
+const Redis = require('ioredis');
+const redis = new Redis(process.env.REDIS_URL);
 const {KEYLOGGER} = require("./lib/constants");
 
 const app = express();
-//
+//store: new RedisStore({ client: redis }),
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, '/views'));
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(session({
+	secret: KEYLOGGER,
+	cookie: { maxAge: 30000 },
+	resave: false,
+	saveUninitialized: false
+}));
 
-//set session
-// app.use(session({
-//     secret: KEYLOGGER,
-//     resave: true,
-//     saveUninitialized: true
-// }));
 //
 const engine = new liquidjs.Liquid();
 //Dependecies

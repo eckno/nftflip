@@ -3,74 +3,6 @@
  <!-- content begin -->
  <div class="no-bottom no-top" id="content">
     <div id="top"></div>
-    <!-- <section id="section-hero" class="no-bottom" aria-label="section">
-        <div class="d-carousel">
-            <div id="item-carousel-big" class="owl-carousel wow fadeIn">
-                <div class="nft_pic">                            
-                    <a href="02_dark-item-details.html">
-                        <span class="nft_pic_info">
-                            <span class="nft_pic_title">Glass Cube</span>
-                            <span class="nft_pic_by">Mamie Barnett</span>
-                        </span>
-                    </a>
-                    <div class="nft_pic_wrap">
-                        <img src="images/carousel/crs-1.jpg" class="lazy img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="nft_pic">                            
-                    <a href="02_dark-item-details.html">
-                        <span class="nft_pic_info">
-                            <span class="nft_pic_title">Purple Ocean</span>
-                            <span class="nft_pic_by">Monica Lucas</span>
-                        </span>
-                    </a>
-                    <div class="nft_pic_wrap">
-                        <img src="images/carousel/crs-2.jpg" class="lazy img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="nft_pic">                            
-                    <a href="02_dark-item-details.html">
-                        <span class="nft_pic_info">
-                            <span class="nft_pic_title">Hot Lava</span>
-                            <span class="nft_pic_by">Nicholas Daniels</span>
-                        </span>
-                    </a>
-                    <div class="nft_pic_wrap">
-                        <img src="images/carousel/crs-3.jpg" class="lazy img-fluid" alt="">
-                    </div>
-                </div>                        
-
-
-                <div class="nft_pic">                            
-                    <a href="02_dark-item-details.html">
-                        <span class="nft_pic_info">
-                            <span class="nft_pic_title">Loop Donut</span>
-                            <span class="nft_pic_by">Lori Hart</span>
-                        </span>
-                    </a>
-                    <div class="nft_pic_wrap">
-                        <img src="images/items/anim-5.html" class="lazy img-fluid" alt="">
-                    </div>
-                </div>
-
-                <div class="nft_pic">                            
-                    <a href="02_dark-item-details.html">
-                        <span class="nft_pic_info">
-                            <span class="nft_pic_title">I Believe I Can Fly</span>
-                            <span class="nft_pic_by">Fred Ryan</span>
-                        </span>
-                    </a>
-                    <div class="nft_pic_wrap">
-                        <img src="images/items/anim-8.html" class="lazy img-fluid" alt="">
-                    </div>
-                </div>
-            </div>
-                <div class="d-arrow-left"><i class="fa fa-angle-left"></i></div>
-                <div class="d-arrow-right"><i class="fa fa-angle-right"></i></div>
-        </div>
-    </section> -->
 
     <section id="section-hero" class="no-bottom" data-bgimage="url(images/background/13.jpg) bottom">
         <div class="container">
@@ -218,361 +150,57 @@
                         </div>
 
                         <!-- nft item begin -->
+                        {% if nfts %}
+                        {% for nft in nfts %}
                         <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
                             <div class="nft__item style-2">
+                                {% if nft.countdowntime %}
                                 <div class="de_countdown bg-color-secondary text-white" data-year="2022" data-month="5" data-day="22" data-hour="8"></div>
+                                {% endif %}
                                 <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Monica Lucas">                                    
-                                        <img class="lazy" src="images/author/author-1.jpg" alt="">
+                                    <a href="/" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: NFTFLIP TRADE">                                    
+                                        <img class="lazy" src="images/logo-2-light.png" alt="">
                                         <i class="fa fa-check"></i>
                                     </a>
                                 </div>
                                 <div class="nft__item_wrap">
                                     <div class="nft__item_extra">
                                         <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_non-bid-item-details.html'">Invest Now</button>
+                                            <button onclick="location.href='/bid_details?id={{nft.nftid}}'">Invest Now</button>
                                             <div class="nft__item_share">
                                                 <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
+                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://nftflip.trade" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
+                                                <a href="https://twitter.com/intent/tweet?url=https://nftflip.trade" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
+                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://nftflip.trade"><i class="fa fa-envelope fa-lg"></i></a>
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items-alt/static-1.jpg" class="lazy nft__item_preview" alt="">
+                                    <a href="/bid_details?id={{nft.nftid}}">
+                                        <img src="{{nft.nftUrl}}" class="lazy nft__item_preview" alt="">
                                     </a>
                                 </div>
                                 <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Sunny Day</h4>
+                                    <a href="/bid_details?id={{nft.nftid}}">
+                                        <h4>{{nft.name}}</h4>
                                     </a>
                                     <div class="nft__item_click">
                                 <span></span>
                             </div>
                             <div class="nft__item_price">
-                                   0.534ETH<span>2/20</span>
+                                   Minimum Bid {{nft.bid}}ETH / <span>Exp. {{nft.profitexp}}ETH</span>
                                     </div>
                                     <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
+                                        <a href="/bid_details?id={{nft.nftid}}">Place a bid</a>
                                     </div>
                                     <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>50</span>
+                                        <i class="fa fa-heart"></i><span>{{nft.like}}</span>
                                     </div>                            
                                 </div> 
                             </div>
-                        </div>                 
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Stacy Long">                                    
-                                        <img class="lazy" src="images/author/author-10.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items-alt/static-2.jpg" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Blue Planet</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                        0.905 ETH<span>6/22</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>80</span>
-                                    </div>                                 
-                                </div> 
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="de_countdown bg-color-secondary text-white" data-year="2022" data-month="5" data-day="12" data-hour="8"></div>
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Ida Chapman">                                    
-                                        <img class="lazy" src="images/author/author-11.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items-alt/static-3.jpg" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Finally Free</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                0.635 ETH<span>3/11</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>97</span>
-                                    </div>                                 
-                                </div> 
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Fred Ryan">                                    
-                                        <img class="lazy" src="images/author/author-12.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items-alt/static-4.jpg" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Work From Home</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                 1.007 ETH<span>7/15</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>190</span>
-                                    </div>                                 
-                                </div> 
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Franklin Greer">                                    
-                                        <img class="lazy" src="images/author/author-9.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items/anim-4.html" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>The Truth</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                0.689 ETH<span>1/20</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>56</span>
-                                    </div>                                 
-                                </div>
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="de_countdown bg-color-secondary text-white" data-year="2022" data-month="5" data-day="28" data-hour="8"></div>
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Mamie Barnett">                                    
-                                        <img class="lazy" src="images/author/author-2.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items-alt/static-5.jpg" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Running Puppets</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                0.920 ETH<span>1/24</span>
-                                    </div>    
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>58</span>
-                                    </div>                                  
-                                </div> 
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Nicholas Daniels">                                    
-                                        <img class="lazy" src="images/author/author-3.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_non-bid-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_non-bid-item-details.html">
-                                        <img src="images/items-alt/static-6.jpg" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_non-bid-item-details.html">
-                                        <h4>Green Frogman</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                0.496 ETH<span>1/25</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>77</span>
-                                    </div>                                 
-                                </div> 
-                            </div>
-                        </div>
-                        <!-- nft item begin -->
-                        <div class="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                            <div class="nft__item style-2">
-                                <div class="de_countdown bg-color-secondary text-white" data-year="2022" data-month="5" data-day="8" data-hour="8"></div>
-                                <div class="author_list_pp">
-                                    <a href="02_dark-author.html" data-bs-toggle="tooltip" data-bs-placement="top" title="Creator: Lori Hart">                                    
-                                        <img class="lazy" src="images/author/author-4.jpg" alt="">
-                                        <i class="fa fa-check"></i>
-                                    </a>
-                                </div>
-                                <div class="nft__item_wrap">
-                                    <div class="nft__item_extra">
-                                        <div class="nft__item_buttons">
-                                            <button onclick="location.href='02_dark-item-details.html'">Invest Now</button>
-                                            <div class="nft__item_share">
-                                                <h4>Share</h4>
-                                                <a href="https://www.facebook.com/sharer/sharer.php?u=https://" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
-                                                <a href="https://twitter.com/intent/tweet?url=https://" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>
-                                                <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site https://"><i class="fa fa-envelope fa-lg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="02_dark-item-details.html">
-                                        <img src="images/items/anim-5.html" class="lazy nft__item_preview" alt="">
-                                    </a>
-                                </div>
-                                <div class="nft__item_info">
-                                    <a href="02_dark-item-details.html">
-                                        <h4>Loop Donut</h4>
-                                    </a>
-                                    <div class="nft__item_click">
-                                <span></span>
-                            </div>
-                            <div class="nft__item_price">
-                                0.908 ETH<span>1/14</span>
-                                    </div>
-                                    <div class="nft__item_action">
-                                        <a href="#">Place a bid</a>
-                                    </div>
-                                    <div class="nft__item_like">
-                                        <i class="fa fa-heart"></i><span>94</span>
-                                    </div>                                 
-                                </div> 
-                            </div>
-                        </div>
+                        </div> 
+                        {% endfor %}
+                        {% endif %}
+                         
                     </div>
 
                     <div class="spacer-single"></div>
