@@ -710,6 +710,10 @@ progress {
 .offset-11 {
   margin-left: 91.66667%; }
 
+.pr-5{padding-right: 5px;}
+.pt-50{padding-top: 50px;}
+.pl-5{padding-left: 5px;}
+
 .g-0,
 .gx-0 {
   --bs-gutter-x: 0; }
@@ -1421,6 +1425,9 @@ progress {
   .g-xl-5,
   .gy-xl-5 {
     --bs-gutter-y: 3rem; } }
+
+
+ 
 
 @media (min-width: 1400px) {
   .col-xxl {
