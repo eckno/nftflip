@@ -12,7 +12,11 @@
 
 
 <script src="/dashboard/js/scripts.js"></script>
-
+{% if footer_scripts %}
+{% for script in footer_scripts %}
+<script src="{{script}}"></script>
+{% endfor %}
+{% endif %}
 
 </body>
 
