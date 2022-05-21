@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {DASHBOARD} = require("../lib/user-routes");
+const {DASHBOARD, WALLET, BIDS, PROFILE, SETTINGS, ADD_FUNDS} = require("../lib/user-routes");
 const {LANDING_PAGE, LOGIN, REGISTERATION, VERIFICATION, NFT_DETAILS} = require("../lib/index-routes");
 const indexController = require("../controller/index");
 const controller = new indexController();
@@ -47,18 +47,51 @@ router.get(NFT_DETAILS, check_nft_id, async (req, res) => {
 
 router.get(DASHBOARD, User, async (req, res) => {
     //
-    const getUser = await controller.dashboard(req, res);
-    console.log(getUser);
-    if(getUser === false){
-        return res.redirect(ROUTE_LOGIN);
-    }
-    else
-    {
-        return res.render("dashboard/home", {
-            title: 'Biders Dashboard | ' + getUser['name'],
-            user: getUser
-        });
-    }
+    return controller.dashboard(req, res);
+    
 });
+
+router.get(WALLET, User, async (req, res) => {
+    //
+    return controller.wallet(req, res);
+    
+});
+
+router.get(BIDS, User, async (req, res) => {
+    //
+    return controller.bids(req, res);
+    
+});
+
+router.get(PROFILE, User, async (req, res) => {
+    //
+    return controller.profile(req, res);
+    
+});
+
+router.get(SETTINGS, User, async (req, res) => {
+    //
+    return controller.settings(req, res);
+    
+});
+
+router.post(SETTINGS, User, async (req, res) => {
+    //
+    return controller.settings(req, res);
+    
+});
+
+router.get(ADD_FUNDS, User, async (req, res) => {
+    //
+    return controller.addFunds(req, res);
+    
+});
+
+router.post(ADD_FUNDS, User, async (req, res) => {
+    //
+    return controller.addFunds(req, res);
+    
+});
+
 
 module.exports = router;
