@@ -147,6 +147,13 @@ class indexController extends baseController
                     refid: post['refid'],
                     emailValidationToken: uuidv4(),
                     emailValidated: false,
+                    currentBid: 0,
+                    runningValue: 0,
+                    totalBalance: 0,
+                    totalDeposit: 0,
+                    totalBid: 0,
+                    last_month_inc: 0,
+                    currentDep: 0,
                     regOn: Date()
                 }
                 const isuser = await auth.createUser({
@@ -266,20 +273,158 @@ class indexController extends baseController
             title: `${nft_details[0].name} || No.1 NFT Bidding platform`,
             nfts: nft_details,
             randomint: 234
-            
         });
     }
 
     async dashboard(req, res)
     {
-        if(!empty(req.getUser))
-        {
-            return req.getUser;
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+        let nft_list = {};
+        const nfts = await db.collection("nfts").get();
+        nft_list = nfts.docs.map(doc => doc.data());
+
+        return res.render("dashboard/home", {
+            title: `Biders Dashboard | ${Users.data().fname}`,
+            token: req.query.token,
+            loggedUser: Users.data(),
+            nfts: nft_list
+        });
+        
+    }
+
+    async wallet(req, res)
+    {
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+
+        return res.render("dashboard/wallet", {
+            title: `Wallet Balance | ${Users.data().fname}`,
+            token: req.query.token,
+            loggedUser: Users.data()
+        });
+        
+    }
+
+    async bids(req, res)
+    {
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+
+        return res.render("dashboard/bids", {
+            title: `Wallet Balance | ${Users.data().fname}`,
+            token: req.query.token,
+            loggedUser: Users.data()
+        });
+        
+    }
+
+    async profile(req, res)
+    {
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+
+        return res.render("dashboard/profile", {
+            title: `User Profile | ${Users.data().fname}`,
+            token: req.query.token,
+            loggedUser: Users.data()
+        });
+        
+    }
+
+    async settings(req, res)
+    {
+        if(req.method == "POST"){
+            //
+            const post = baseController.sanitizeRequestData(req.body);
+
+            const data_update = {
+                username: post['username'],
+                address: post['address'],
+                city: post['city'],
+                pcode: post['postal'],
+                country: post['country']
+            }
+            
+            const result = await db.collection("members").doc(req.getUser.uid).update(data_update);
+            console.log(result);
+            if(result){
+                //
+                baseController.sendSuccessResponse(res, {
+                    success: true
+                })
+            }
         }
         else
         {
-            return false;
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+
+        return res.render("dashboard/settings", {
+            title: `Profile Settings | ${Users.data().fname}`,
+            token: req.query.token,
+            footer_scripts: [
+                "js/app/dashboard/settings.js"
+            ],
+            loggedUser: Users.data()
+        });
         }
+        
+    }
+
+    async addFunds(req, res)
+    {
+        if(req.method === "POST"){
+            const post = baseController.sanitizeRequestData(req.body);
+            if(empty(post['amount'])){
+                return baseController.sendFailResponse(res, {
+                    success: false,
+                    msg: "Oops! kindly enter a valid amount for deposit"
+                })
+            }else if(post['amount'] < 0.5){
+                return baseController.sendFailResponse(res, {
+                    success: false,
+                    msg: "You can only deposit a minimum of 0.5ETH"
+                })
+            }
+            //
+            const data_to_send = {
+                clientName: req.getUser.fname,
+                uid: req.getUser.uid,
+                amount: post['amount'],
+                desc: post['desc'],
+                status: "pending",
+                currency: "ETH",
+                tax: 0.01
+            }
+
+            const result = await db.collection("deposits").doc().set(data_to_send);
+            if(result){
+                return baseController.sendSuccessResponse(res, {
+                    success: true,
+                    redirectURL: `/deposit_details?token=${req.query.token}`,
+                })
+            }
+
+            return baseController.sendFailResponse(res, {
+                success: false,
+                msg: "Oops! something went wrong, please contact support for assistance"
+            })
+        }
+        else
+        {
+            const Users = await db.collection("members").doc(req.getUser.uid).get();
+            //
+    
+            return res.render("dashboard/addfunds", {
+                title: `Add Payments | ${Users.data().fname}`,
+                token: req.query.token,
+                footer_scripts: [
+                    "js/app/dashboard/add_funds.js"
+                ],
+                loggedUser: Users.data()
+            });
+        }
+        
     }
 }
 
