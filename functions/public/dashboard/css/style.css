@@ -714,6 +714,18 @@ progress {
 .pt-50{padding-top: 50px;}
 .pl-5{padding-left: 5px;}
 
+.btn.bxt{
+  color: #fff;
+  padding: 3px;
+  margin: 3px 0px;
+  width: 100%;
+  font-weight: 700;
+  font-size: 12px;
+  background-color: transparent;
+  border-radius: 12px ; 
+  border: 1px solid  #030303;
+}
+
 .g-0,
 .gx-0 {
   --bs-gutter-x: 0; }

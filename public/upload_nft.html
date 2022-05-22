@@ -14,6 +14,15 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="/dashboard/images/favicon.png">
     <link rel="stylesheet" href="/functions/public/dashboard/css/style.css">
+
+    <!-- Note: link this to the front-end css, i renamed the style to avoid conflict with the dashboard style. update and remove 
+    comment  -->
+    <link href="css/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="css/style2.css" rel="stylesheet" type="text/css" />
+    <link href="css/users.css" rel="stylesheet" type="text/css" />
+    <!-- color scheme -->
+    <link id="colors" href="css/colors/scheme-04.css" rel="stylesheet" type="text/css" />
+    <link href="css/coloring.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="@@dashboard">
@@ -77,7 +86,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="" href="index-2.html#">
+                                    <a class="" href="#">
                                         <div class="d-flex align-items-center"><span class="me-3 icon pending"><i
                                                     class="ri-question-mark"></i></span>
                                             <div>
@@ -138,7 +147,7 @@
         <ul>
             <li>
                 <a href="users-list.html">
-                    <span><i class="ri-layout-grid-fill"></i></span>
+                    <span><i class="ri-home-3-fill"></i></span>
                     <span class="nav-text">Users</span>
                 </a>
             </li>
@@ -154,11 +163,10 @@
                 </a>
             </li>
             <li class="">
-                <a href="pending.html">
+                <a href="#collection">
                     <span><i class="ri-star-line"></i></span>
                     <span class="nav-text">Pending</span></a>
             </li>
-            
             <li class="">
                 <a href="edit_user_profile.html">
                     <span><i class="ri-user-add-line"></i></span>
@@ -169,7 +177,7 @@
                     <span><i class="ri-upload-line"></i></span>
                     <span class="nav-text">Upload NFTs</span></a>
             </li>
-   
+          
             <li class=" logout">
                 <a href="">
                     <span><i class="ri-logout-circle-line"></i></span>
@@ -186,66 +194,164 @@
             <div class="row">
         
     
-                <div class="col-xxl-4 col-xl-12">
-                 
-                        <div class="card m-0">
-                            <div class="card-header">
-                                <h4 class="card-title">Account Activity</h4><small>Recent activity on your account.</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Name</th>
-                                                <th>Description</th>
-                                                <th>Type</th>
-                                                <th>Status</th>
-                                                <th>Transaction id</th>
-                                                <th>Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>02 June 2022</td>
-                                                <td>Bangladesh</td>
-                                                <td>verified second factor</td>
-                                                <td>Withdraw</td>
-                                                <td>Approved</td>
-                                                <td>djdhfgffyr374jr</td>
-                                                <td>0.900 ETH</td>
-                                            </tr>
-                                            <tr>
-                                                <td>05 May 2022</td>
-                                                <td>Bangladesh</td>
-                                                <td>verified second factor</td>
-                                                <td>Withdraw</td>
-                                                <td>Pending</td>
-                                                <td>djdhfgffyr374jr</td>
-                                                <td>5.900 ETH</td>
-                                            </tr>
-                                           
-                                        </tbody>
-                                    </table>
+                <div class="col-xl-12">
+                   
+                  <!-- section begin -->
+            <section aria-label="section">
+                <div class="container">
+                    <div class="row wow fadeIn">
+                        <div class="col-lg-7 offset-lg-1">
+                            <form id="form-create-item" class="form-border" method="post" action="email.php">
+                                <div class="field-set">
+                                    <h5>Upload file</h5>
+
+                                    <div class="d-create-file">
+                                        <p id="file_name">PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                                        <input type="button" id="get_file" class="btn-main" value="Browse">
+                                        <input type="file" id="upload_file">
+                                    </div>
+
+                                    <div class="spacer-40"></div>
+
+                                    <h5>Select method</h5>
+                                    <div class="de_tab tab_methods">
+                                        <ul class="de_nav">
+                                            <li class="active"><span><i class="fa fa-tag"></i>Fixed price</span>
+                                            </li>
+                                            <li><span><i class="fa fa-hourglass-1"></i>Timed auction</span>
+                                            </li>
+                                            <li><span><i class="fa fa-users"></i>Open for bids</span>
+                                            </li>
+                                        </ul>
+
+                                        <div class="de_tab_content">
+
+                                            <div id="tab_opt_1">
+                                                <h5>Price</h5>
+                                                <input type="text" name="item_price" id="item_price" class="form-control" placeholder="enter price for one item (ETH)" />
+                                            </div>
+
+                                            <div id="tab_opt_2">
+                                                <h5>Minimum bid</h5>
+                                                <input type="text" name="item_price_bid" id="item_price_bid" class="form-control" placeholder="enter minimum bid" />
+
+                                                <div class="spacer-20"></div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h5>Starting date</h5>
+                                                        <input type="date" name="bid_starting_date" id="bid_starting_date" class="form-control" min="1997-01-01" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h5>Expiration date</h5>
+                                                        <input type="date" name="bid_expiration_date" id="bid_expiration_date" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="tab_opt_3">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="spacer-20"></div>
+
+                                    <div class="switch-with-title">
+                                        <h5><i class="fa fa- fa-unlock-alt id-color-2 icon_padlock"></i>Unlock once purchased</h5>
+                                        <div class="de-switch">
+                                            <input type="checkbox" id="switch-unlock" class="checkbox">
+                                            <label for="switch-unlock"></label>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <p class="p-info">Unlock content after successful transaction.</p>
+
+                                        <div class="hide-content">
+                                            <input type="text" name="item_unlock" id="item_unlock" class="form-control" placeholder="Access key, code to redeem or link to a file..." />
+                                        </div>
+                                    </div>
+
+                                    <div class="spacer-20"></div>
+
+                                    <h5>Choose collection</h5>
+                                    <p class="p-info">This is the collection where your item will appear.</p>
+
+                                    <div id="item_collection" class="dropdown fullwidth mb20">
+                                        <a href="#" class="btn-selector">Select Collection</a>
+                                        <ul>
+                                            <li><span>Abstraction</span></li>
+                                            <li><span>Patternlicious</span></li>
+                                            <li><span>Skecthify</span></li>
+                                            <li><span>Cartoonism</span></li>
+                                            <li><span>Virtuland</span></li>
+                                            <li><span>Papercut</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="spacer-20"></div>
+
+                                    <h5>Title</h5>
+                                    <input type="text" name="item_title" id="item_title" class="form-control" placeholder="e.g. 'Crypto Funk" />
+
+                                    <div class="spacer-20"></div>
+
+                                    <h5>Description</h5>
+                                    <textarea data-autoresize name="item_desc" id="item_desc" class="form-control" placeholder="e.g. 'This is very limited item'"></textarea>
+
+                                    <div class="spacer-20"></div>
+
+                                    <h5>Royalties</h5>
+                                    <input type="text" name="item_royalties" id="item_royalties" class="form-control" placeholder="suggested: 0, 10%, 20%, 30%. Maximum is 70%" />
+
+                                    <div class="spacer-single"></div>
+
+                                    <input type="button" id="submit" class="btn-main" value="Create Item">
+                                    <div class="spacer-single"></div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                            <h5>Preview item</h5>
+                            <div class="nft__item style-2">
+                                <div class="de_countdown" data-year="2022" data-month="6" data-day="16" data-hour="8"></div>
+                                <div class="author_list_pp">
+                                    <a href="#">                                    
+                                            <img class="lazy" src="images/author/author-1.jpg" alt="">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                </div>
+                                <div class="nft__item_wrap">
+                                    <a href="#">
+                                            <img src="images/collections/coll-item-3.jpg" id="get_file_2" class="lazy nft__item_preview" alt="">
+                                        </a>
+                                </div>
+                                <div class="nft__item_info">
+                                    <a href="#">
+                                        <h4>Pinky Ocean</h4>
+                                    </a>
+                                    <div class="nft__item_click">
+                                        <span></span>
+                                    </div>
+                                    <div class="nft__item_price">
+                                        0.08 ETH<span>1/20</span>
+                                    </div>
+                                    <div class="nft__item_action">
+                                        <a href="#">Place a bid</a>
+                                    </div>
+                                    <div class="nft__item_like">
+                                        <i class="fa fa-heart"></i><span>50</span>
+                                    </div>
                                 </div>
                             </div>
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end">
-                                  <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                  </li>
-                                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                  <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                  </li>
-                                </ul>
-                              </nav>
                         </div>
-                    
+                    </div>
                 </div>
+            </section>
+
+                </div>
+            
              
             </div>
         </div>
@@ -254,6 +360,7 @@
 
     
 </div>
+
 
 
 
@@ -270,6 +377,8 @@
 
 <script src="/functions/public/dashboard/js/scripts.js"></script>
 
+<script src="js/plugins.js"></script>
+<script src="js/designesia.js"></script>
 
 </body>
 
