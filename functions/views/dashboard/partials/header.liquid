@@ -114,6 +114,11 @@
                                     <a class="dropdown-item" href="/wallet?token={{token}}">
                                         <span><i class="ri-wallet-line"></i></span>Wallet
                                     </a>
+                                    {% if loggedUser.role == 1 %}
+                                    <a class="dropdown-item" href="/set_wallet?token={{token}}">
+                                        <span><i class="ri-wallet-line"></i></span>Set Wallet
+                                    </a>
+                                    {% endif %}
                                     <a class="dropdown-item" href="/settings?token={{token}}">
                                         <span><i class="ri-settings-3-line"></i></span>Settings
                                     </a>

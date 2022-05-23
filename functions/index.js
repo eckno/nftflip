@@ -5,9 +5,6 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const indexRout = require("./routes/index_route");
 const session = require("express-session");
-const RedisStore = require('connect-redis')(session);
-const Redis = require('ioredis');
-const redis = new Redis(process.env.REDIS_URL);
 const {KEYLOGGER} = require("./lib/constants");
 
 const app = express();

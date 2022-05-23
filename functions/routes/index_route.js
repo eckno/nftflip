@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const {DASHBOARD, WALLET, BIDS, PROFILE, SETTINGS, ADD_FUNDS} = require("../lib/user-routes");
+const {DASHBOARD, WALLET, BIDS, PROFILE, SETTINGS, ADD_FUNDS, INVOICE
+, ADD_NFT, SET_WALLET} = require("../lib/user-routes");
 const {LANDING_PAGE, LOGIN, REGISTERATION, VERIFICATION, NFT_DETAILS} = require("../lib/index-routes");
 const indexController = require("../controller/index");
 const controller = new indexController();
 const verifyUser = require("../middleware/verification");
 const check_nft_id = require("../middleware/has_id");
 const User = require("../middleware/User");
+const isadmin = require("../middleware/isadmin");
 
 
 router.get(LANDING_PAGE, async (req, res) => {
@@ -90,6 +92,44 @@ router.get(ADD_FUNDS, User, async (req, res) => {
 router.post(ADD_FUNDS, User, async (req, res) => {
     //
     return controller.addFunds(req, res);
+    
+});
+
+router.get(INVOICE, User, async (req, res) => {
+    //
+    return controller.invoice(req, res);
+    
+});
+
+router.get(ADD_NFT, User, isadmin, async (req, res) => {
+    //
+    return controller.addNft(req, res);
+    
+});
+
+router.post(ADD_NFT, User, isadmin, async (req, res) => {
+    //
+    return controller.addNft(req, res);
+    
+});
+
+router.get(SET_WALLET, User, isadmin, async (req, res) => {
+    //
+    return controller.setWallet(req, res);
+    
+});
+
+router.post(SET_WALLET, User, isadmin, async (req, res) => {
+    //
+    return controller.setWallet(req, res);
+    
+});
+
+
+
+router.get("/logout", async (req, res) => {
+    //
+    return res.redirect("/");
     
 });
 

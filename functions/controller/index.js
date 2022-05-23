@@ -79,7 +79,7 @@ class indexController extends baseController
                     }
                     //
                     
-                    const createdToken = jwt.sign(additionalClaim, KEYLOGGER);
+                    const createdToken = jwt.sign(additionalClaim, KEYLOGGER, { expiresIn: '1h' });
                         if(!empty(createdToken) && isString(createdToken))
                         {
                             // console.log(createdToken);
@@ -375,6 +375,7 @@ class indexController extends baseController
     {
         if(req.method === "POST"){
             const post = baseController.sanitizeRequestData(req.body);
+
             if(empty(post['amount'])){
                 return baseController.sendFailResponse(res, {
                     success: false,
@@ -386,22 +387,32 @@ class indexController extends baseController
                     msg: "You can only deposit a minimum of 0.5ETH"
                 })
             }
+            const Users = await db.collection("members").doc(req.getUser.uid).get();
+            //
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            const d = new Date();
+            let month = months[d.getMonth()];
+            const invoidId = uuidv4();
             //
             const data_to_send = {
-                clientName: req.getUser.fname,
+                clientName: Users.data().fname,
                 uid: req.getUser.uid,
                 amount: post['amount'],
                 desc: post['desc'],
                 status: "pending",
                 currency: "ETH",
+                invoice_id: indexController.random_number(10, 200),
+                date: month + ' ' + d.getDate() + ' ' + d.getFullYear(),
                 tax: 0.01
             }
 
-            const result = await db.collection("deposits").doc().set(data_to_send);
+            const result = await db.collection("deposits").doc(invoidId).set(data_to_send);
+            
             if(result){
                 return baseController.sendSuccessResponse(res, {
                     success: true,
-                    redirectURL: `/deposit_details?token=${req.query.token}`,
+                    redirectURL: `/deposit_details?token=${req.query.token}&invoice=${invoidId}`,
                 })
             }
 
@@ -422,6 +433,157 @@ class indexController extends baseController
                     "js/app/dashboard/add_funds.js"
                 ],
                 loggedUser: Users.data()
+            });
+        }
+        
+    }
+
+    async invoice(req, res)
+    {
+        const invoice = await db.collection("deposits").doc(req.query.invoice).get();
+        const getWallet = await db.collection("wallet").doc("59729c37-fbf8-49b2-a080-50676212e157").get();
+        //
+        if(!invoice.data() || empty(invoice.data().uid))
+        {
+            res.redirect(`/dashboard?token=${req.query.token}`)
+        }
+        var result = parseFloat(invoice.data().amount) + parseFloat(invoice.data().tax);
+       
+        return res.render("dashboard/invoice_p", {
+            title: `Payment details | ${invoice.data().clientName}`,
+            token: req.query.token,
+            gtotal: result.toFixed(2),
+            wallet: getWallet.data(),
+            loggedUser: invoice.data()
+        });
+        
+    }
+
+    async fetchUser(uid){
+        //
+        const user = await db.collection("members").doc(uid).get();
+        //
+        if(user.data() && !empty(user.data().uid)){
+            return user.data();
+        }else{
+            return null;
+        }
+    }
+
+    async addNft(req, res)
+    {
+        if(req.method == "POST"){
+            //
+            const post = baseController.sanitizeRequestData(req.body);
+            const bidid = uuidv4();
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            const d = new Date();
+            let month = months[d.getMonth()];
+            let countdown="";
+            if(post['hascountdown'] == "yes"){
+                countdown = true;
+            }else{
+                countdown = false;
+            }
+            //
+            const dataSender = {
+                addedOn: month + ' ' + d.getDate() + ' ' + d.getFullYear(),
+                bid: post['bidprice'],
+                countdowntime: countdown,
+                description: post['desc'],
+                duration: post['duration'],
+                like: post['like'],
+                name: post['nftname'],
+                nftUrl: post['nfturl'],
+                nftid: bidid,
+                profitexp: post['price'],
+            }
+
+            //
+            const query = await db.collection("nfts").doc(bidid).set(dataSender);
+
+            if(query){
+                if(post['iscurrent'] == 'yes'){
+                    const query_t = await db.collection("currentBid").doc("fccb62fa-5f35-4507-8ee5-83fcd78595c7").update(dataSender);
+                    //
+                    return baseController.sendSuccessResponse(res, {
+                        success: true,
+                        msg: `NFT successfully added to list`,
+                    });
+                }
+
+                return baseController.sendSuccessResponse(res, {
+                    success: true,
+                    msg: `NFT successfully added to list`,
+                });
+            }
+
+            return baseController.sendFailResponse(res, {
+                success: false,
+                msg: "Oops! something went wrong, please contact support for assistance"
+            })
+        }
+        else
+        {
+             //const Users = await db.collection("members").doc(req.getUser.uid).get();
+
+        return res.render("admin/add_nft", {
+            title: `Add Nft | ${req.admin.fname}`,
+            footer_scripts: [
+                "js/app/admin/add_nft.js"
+            ],
+            token: req.query.token,
+            loggedUser: req.admin
+        });
+        }
+       
+    }
+
+    async setWallet(req, res)
+    {
+        if(req.method == "POST"){
+            //
+            const post = baseController.sanitizeRequestData(req.body);
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+	        const d = new Date();
+	        let month = months[d.getMonth()];
+
+            const data_to_send = {
+                addOn: month + ' ' + d.getDate() + ' ' + d.getFullYear(),
+                type: "ETH",
+                long_name: "Ethereum",
+                address: post['wallet']
+            }
+
+            const query = await db.collection("wallet").doc("59729c37-fbf8-49b2-a080-50676212e157").update(data_to_send);
+
+            if(query){
+                return baseController.sendSuccessResponse(res, {
+                    success: true,
+                    msg: `Ethereum wallet address updated successfuly`,
+                });
+            }
+
+            return baseController.sendFailResponse(res, {
+                success: false,
+                msg: "Oops! something went wrong, please contact support for assistance"
+            })
+        }
+        else
+        {
+            const getWallet = await db.collection("wallet").doc("59729c37-fbf8-49b2-a080-50676212e157").get();
+            //
+    
+            return res.render("admin/add_wallet", {
+                title: `Add Wallet | ${req.admin.fname}`,
+                footer_scripts: [
+                    "js/app/admin/add_wallet.js"
+                ],
+                token: req.query.token,
+                loggedUser: req.admin,
+                wallet: getWallet.data(),
             });
         }
         

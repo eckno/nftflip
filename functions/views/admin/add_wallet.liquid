@@ -1,0 +1,53 @@
+{% include 'dashboard/partials/header.liquid' %}
+{% include 'dashboard/partials/sidebar.liquid' %}
+
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+        
+    
+                <div class="col-xl-12">
+                   
+                  <!-- section begin -->
+            <section aria-label="section">
+                <div class="container">
+                    <div class="row wow fadeIn">
+                        <div class="col-lg-7 offset-lg-1">
+                            <form id="form-create-item" class="form-border" method="post" action="email.php">
+                                <div class="field-set">
+                                    
+                                    <div class="de_tab tab_methods">
+
+                                        <div class="de_tab_content">
+
+                                            <div id="tab_opt_1">
+                                                <h5>Ethereum Wallet Address</h5>
+                                                <input type="text" name="address" value="{{wallet.address}}" id="address" class="form-control" placeholder="enter address" required />
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="spacer-20"></div>
+                                    <div class="mt-3 mb-5">
+                                        <button type="submit" id="subBtn" class="btn btn-primary">Update wallet</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </section>
+
+                </div>
+            
+             
+            </div>
+        </div>
+    </div>
+
+    {% include 'dashboard/partials/footer.liquid' %}
