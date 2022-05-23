@@ -92,7 +92,23 @@ class BaseController {
 	  
 		console.log("Message sent: %s", info.messageId);
 	}
-    
+
+  static random_number(min, max) {
+	return Math.floor(
+		Math.random() * (max - min) + min
+	  )
+  }
+
+  static preffered_date_format() {
+
+	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+	const d = new Date();
+	let month = months[d.getMonth()];
+
+	return month + ' ' + d.getDate() + ' ' + d.getFullYear();
+  }
+
 }
 
 module.exports = BaseController;

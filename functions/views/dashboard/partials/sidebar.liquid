@@ -13,32 +13,34 @@
                     <span><i class="ri-briefcase-line"></i></span>
                     <span class="nav-text">Bids</span></a>
             </li>
+            {% if loggedUser.role == 1 or loggedUser.role ==2 %}
             <li class="">
-                <a href="saved.html">
+                <a href="/add_nft?token={{token}}">
                     <span><i class="ri-heart-line"></i></span>
-                    <span class="nav-text">Saved</span></a>
+                    <span class="nav-text">Add Nft</span></a>
             </li>
+            {% endif %}
             <li class="">
-                <a href="collection.html">
+                <a href="#">
                     <span><i class="ri-star-line"></i></span>
                     <span class="nav-text">Collection</span></a>
             </li>
             <li class="">
-                <a href="wallet.html">
+                <a href="/wallet?token={{token}}">
                     <span><i class="ri-wallet-line"></i></span>
                     <span class="nav-text">Wallet</span></a>
             </li>
             <li class="">
-                <a href="profile.html">
+                <a href="/profile?token={{token}}">
                     <span><i class="ri-account-box-line"></i></span>
                     <span class="nav-text">Profile</span></a>
             </li>
             <li class="">
-                <a href="settings-profile.html">
+                <a href="/settings?token={{token}}">
                     <span><i class="ri-settings-3-line"></i></span>
                     <span class="nav-text">Settings</span></a>
             </li>
-            <li class=" logout"><a href="signin.html">
+            <li class=" logout"><a href="/logout">
                     <span><i class="ri-logout-circle-line"></i></span>
                     <span class="nav-text">Signout</span>
                 </a>

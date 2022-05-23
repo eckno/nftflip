@@ -4,43 +4,55 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
   // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
   let value = params.some_key; // "some_value"
 
-const setform = document.getElementById("profileForm");
-const setformBtn = document.getElementById("profileFormBtn");
+const setform = document.getElementById("form-create-item");
+const setformBtn = document.getElementById("subBtn");
 
 setform.addEventListener("submit", e => {
     e.preventDefault();
     setformBtn.innerHTML =`<div class="spinner spinner-border-sm spinner-border"></div>`;
 
-    const amount = setform['amount'].value;
-    const desc = setform['desc'].value;
-    
+    const wallet = setform['address'].value;
+
     //
     const send_data = {
-        amount,
-        desc
+        wallet
     }
 
     $.ajax({
         type: "POST",
-        url: `/add_funds?token=${params.token}`,
+        url: `/set_wallet?token=${params.token}`,
         data: send_data,
         dataType: "JSON",
         success: function (resp){
-            setformBtn.innerHTML ="Add Funds";
+            setformBtn.innerHTML ="Update Wallet";
             if(resp.success == true){
                 //
-                setformBtn.innerHTML =`<div class="spinner spinner-border-sm spinner-border"></div>Generating wallet...`;
-                
-                setTimeout(() => {
-                  //
-                  location.href = resp['data'].redirectURL;
-                }, 4000);
-                
+                let timerInterval
+                Swal.fire({
+                  title: 'Success!',
+                  html: 'Ethereum wallet address updated successfuly!',
+                  timer: 2000,
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    timerInterval = setInterval(() => {
+                      
+                    }, 100)
+                  },
+                  willClose: () => {
+                    clearInterval(timerInterval)
+                  }
+                }).then((result) => {
+                  /* Read more about handling dismissals below */
+                  if (result.dismiss === Swal.DismissReason.timer) {
+                    //console.log('I was closed by the timer')
+                  }
+                })
+
             }
             console.log(resp);
         },
         error: function (err){
-            setformBtn.innerHTML ="Add Funds";
+            setformBtn.innerHTML ="Update Wallet";
             if(err.responseJSON.errors.success == false){
                 Swal.fire({
                     title: `<p style="color:red; font-size:14px;">${err.responseJSON.errors.msg}</p>`,
