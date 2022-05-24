@@ -11,3 +11,4 @@ exports.ADMIN = "/admin";
 exports.ADD_NFT = "/add_nft";
 exports.VIEW_MEMBERS = "/view_members";
 exports.SET_WALLET = "/set_wallet";
+exports.WITHDRAW = "/withdraw";
