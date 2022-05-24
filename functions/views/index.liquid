@@ -11,130 +11,45 @@
                 <div class="nft__item_lg">
                     <div class="row align-items-center">
                         <div class="col-lg-6">
-                            <img src="images/carousel/crs-4.jpg" class="img-fluid" alt="">
+                            <img src="{{bid.nftUrl}}" class="img-fluid" alt="">
                         </div>
                         <div class="col-lg-6">
                             <div class="d-desc">
-                                <h2>Red Ocean</h2>
+                                <h2>{{bid.name}}</h2>
                                 <div class="d-author">
                                     <div class="author_list_pp">
-                                        <a href="03_grey-author.html">
-                                            <img class="lazy" src="images/author/author-1.jpg" alt="">
+                                        <a href="/bid_details?id={{nft.nftid}}">
+                                            <img class="lazy" src="{{bid.nftUrl}}" alt="">
                                             <i class="fa fa-check"></i>
                                         </a>
                                     </div>                                    
                                     <div class="author_list_info">
-                                        <a href="03_grey-author.html">Monica Lucas</a>
-                                        <span>@monicaaa</span>
+                                        <a href="/bid_details?id={{nft.nftid}}">{{bid.name}}</a>
+                                        
                                     </div>
                                 </div>
                                 <div class="d-attr">
                                     <div>
                                         <span class="d-title">Current Bid</span>
-                                        <h3>2.59 ETH</h3>
-                                        <h5>($7578.52)</h5>
+                                        <h3>{{bid.bid}} ETH</h3>
+                                        <h5>({{bid.profitexp}}) ETH</h5>
                                     </div>
                                     <div>
                                         <span class="d-title">Auction end in</span>
                                         <div class="de_countdown" data-year="2022" data-month="5" data-day="16" data-hour="8"></div>
-                                        <h5>(July 19, 2022)</h5>
+                                        <h5>(Profit Exp: {{bid.duration}})</h5>
                                     </div>
                                 </div>
                                 <div class="spacer-10"></div>
                                 <div class="d-buttons">
-                                    <a href="#" class="btn-main" data-bs-toggle="modal" data-bs-target="#place_a_bid">Place a bid</a>&nbsp;
-                                    <a href="02_dark-item-details.html" class="btn-main btn-light">View artwork</a>
+                                    <a href="/bid_details?id={{bid.nftid}}" class="btn-main" data-bs-toggle="modal" data-bs-target="#place_a_bid">Place a bid</a>&nbsp;
+                                    <a href="/bid_details?id={{bid.nftid}}" class="btn-main btn-light">View artwork</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- carousel item -->
-                <div class="nft__item_lg">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <img src="images/carousel/crs-5.jpg" class="img-fluid" alt="">
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="d-desc">
-                                <h2>Live Arts</h2>
-                                <div class="d-author">
-                                    <div class="author_list_pp">
-                                        <a href="03_grey-author.html">
-                                            <img class="lazy" src="images/author/author-5.jpg" alt="">
-                                            <i class="fa fa-check"></i>
-                                        </a>
-                                    </div>                                    
-                                    <div class="author_list_info">
-                                        <a href="03_grey-author.html">Jimmy Wright</a>
-                                        <span>@jimmywright</span>
-                                    </div>
-                                </div>
-                                <div class="d-attr">
-                                    <div>
-                                        <span class="d-title">Current Bid</span>
-                                        <h3>1.78 ETH</h3>
-                                        <h5>($5208.40)</h5>
-                                    </div>
-                                    <div>
-                                        <span class="d-title">Auction end in</span>
-                                        <div class="de_countdown" data-year="2022" data-month="5" data-day="14" data-hour="8"></div>
-                                        <h5>(August 2, 2022)</h5>
-                                    </div>
-                                </div>
-                                <div class="spacer-10"></div>
-                                <div class="d-buttons">
-                                    <a href="#" class="btn-main" data-bs-toggle="modal" data-bs-target="#place_a_bid">Place a bid</a>&nbsp;
-                                    <a href="02_dark-item-details.html" class="btn-main btn-light">View artwork</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- carousel item -->
-                <div class="nft__item_lg">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <img src="images/carousel/crs-1.jpg" class="img-fluid" alt="">
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="d-desc">
-                                <h2>Glass Cube</h2>
-                                <div class="d-author">
-                                    <div class="author_list_pp">
-                                        <a href="03_grey-author.html">
-                                            <img class="lazy" src="images/author/author-4.jpg" alt="">
-                                            <i class="fa fa-check"></i>
-                                        </a>
-                                    </div>                                    
-                                    <div class="author_list_info">
-                                        <a href="03_grey-author.html">Lori Hart</a>
-                                        <span>@lorihart</span>
-                                    </div>
-                                </div>
-                                <div class="d-attr">
-                                    <div>
-                                        <span class="d-title">Current Bid</span>
-                                        <h3>3.69 ETH</h3>
-                                        <h5>($10738.68)</h5>
-                                    </div>
-                                    <div>
-                                        <span class="d-title">Auction end in</span>
-                                        <div class="de_countdown" data-year="2022" data-month="5" data-day="6" data-hour="8"></div>
-                                        <h5>(July 29, 2022)</h5>
-                                    </div>
-                                </div>
-                                <div class="spacer-10"></div>
-                                <div class="d-buttons">
-                                    <a href="#" class="btn-main" data-bs-toggle="modal" data-bs-target="#place_a_bid">Place a bid</a>&nbsp;
-                                    <a href="02_dark-item-details.html" class="btn-main btn-light">View artwork</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>                 
         </div>
     </section>

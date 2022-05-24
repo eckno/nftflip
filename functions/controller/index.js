@@ -29,8 +29,12 @@ class indexController extends baseController
         let nft_list = {};
         const nfts = await db.collection("nfts").get();
         nft_list = nfts.docs.map(doc => doc.data());
+
+        const getCurrentBid = await db.collection("currentBid").doc("fccb62fa-5f35-4507-8ee5-83fcd78595c7").get();
+
         return res.render("index", {
             title: 'Welcome to NFTFLIP TRADE || No.1 NFT Bidding platform',
+            bid: getCurrentBid.data(),
             nfts: nft_list
         });
     }
@@ -297,9 +301,19 @@ class indexController extends baseController
     {
         const Users = await db.collection("members").doc(req.getUser.uid).get();
 
+        let history_list = {};
+        const histories = await db.collection("history").where("user", "==", req.query.id).get();
+        
+        if(histories.empty == true){
+            history_list = false;
+        }else{
+            history_list = histories.docs.map(doc => doc.data());
+        }
+
         return res.render("dashboard/wallet", {
             title: `Wallet Balance | ${Users.data().fname}`,
             token: req.query.token,
+            histories: history_list,
             loggedUser: Users.data()
         });
         
@@ -410,6 +424,18 @@ class indexController extends baseController
             const result = await db.collection("deposits").doc(invoidId).set(data_to_send);
             
             if(result){
+                const historyId = uuidv4();
+
+                const history = {
+                    id: historyId,
+                    category: "Transaction",
+                    type: "Deposit",
+                    user: req.getUser.uid,
+                    amount: post['amount'],
+                    status: "Pending"
+
+                }
+                db.collection('history').doc(history).set(history);
                 return baseController.sendSuccessResponse(res, {
                     success: true,
                     redirectURL: `/deposit_details?token=${req.query.token}&invoice=${invoidId}`,
@@ -586,6 +612,60 @@ class indexController extends baseController
                 wallet: getWallet.data(),
             });
         }
+        
+    }
+
+    async wallet(req, res)
+    {
+        if(req.method == "POST"){
+            const post = baseController.sanitizeRequestData(req.body);
+            
+            if(empty(req.body)){
+                return baseController.sendFailResponse(res, {msg: "Invalid Request"});
+            }
+
+            const Users = await db.collection("members").doc(req.getUser.uid).get();
+            const getBalance = parseFloat(Users.data().totalBalance);
+            if(Users.data() && !empty(Users.data())){
+                if(getBalance < 0.1){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You can't make withdrawal at this time. <br> You either have low or zero balance"
+                    })
+                }
+
+                return baseController.sendSuccessResponse(res, {
+                    success: true
+                });
+            }
+        }
+        else
+        {
+            const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+
+            return res.render("dashboard/wallet", {
+                title: `User Profile | ${Users.data().fname}`,
+                footer_scripts: [
+                    "js/app/dashboard/inside_wallet.js"
+                ],
+                token: req.query.token,
+                loggedUser: Users.data()
+            });
+        }
+        
+    }
+
+    async withdraw(req, res)
+    {
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+
+        return res.render("dashboard/withdraw", {
+            title: `Withdraw Funds | ${Users.data().fname}`,
+            token: req.query.token,
+            loggedUser: Users.data()
+        });
         
     }
 }

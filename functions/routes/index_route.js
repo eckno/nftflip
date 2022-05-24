@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {DASHBOARD, WALLET, BIDS, PROFILE, SETTINGS, ADD_FUNDS, INVOICE
-, ADD_NFT, SET_WALLET} = require("../lib/user-routes");
+, ADD_NFT, SET_WALLET, WITHDRAW} = require("../lib/user-routes");
 const {LANDING_PAGE, LOGIN, REGISTERATION, VERIFICATION, NFT_DETAILS} = require("../lib/index-routes");
 const indexController = require("../controller/index");
 const controller = new indexController();
@@ -122,6 +122,18 @@ router.get(SET_WALLET, User, isadmin, async (req, res) => {
 router.post(SET_WALLET, User, isadmin, async (req, res) => {
     //
     return controller.setWallet(req, res);
+    
+});
+
+router.get(WITHDRAW, User, async (req, res) => {
+    //
+    return controller.withdraw(req, res);
+    
+});
+
+router.post(WITHDRAW, User, async (req, res) => {
+    //
+    return controller.wallet(req, res);
     
 });
 

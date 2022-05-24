@@ -30,8 +30,8 @@
                                         <p>Total Balance</p>
                                         <h2>{{loggedUser.totalBalance}} ETH</h2>
                                         <div class="d-flex justify-content-center mt-3">
-                                            <a href="/withdraw?token={{token}}" class="btn btn-primary" style="margin-right: 2px;">Request Withdrawal</a>
-                                            <a href="/withdraw?token={{token}}" class="btn btn-warning">Add Funds</a>
+                                            <a onclick="confirmWithdrawal(this)" href="javascript:void(0)" class="btn btn-primary" style="margin-right: 2px;">Request Withdrawal</a>
+                                            <a href="/add_funds?token={{token}}" class="btn btn-warning">Add Funds</a>
                                         </div>
                                     </div>
                                 </div>
@@ -68,21 +68,37 @@
                         <div class="card-header">
                             <h4 class="card-title">Latest Transaction</h4><a href="#">See More</a>
                         </div>
+                        {% if histories %}
+                        {% for history in histories %}
                         <div class="card-body bs-0 p-0 top-creators-content  bg-transparent">
                             <div class="d-flex justify-content-between creator-widget active  align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="top-creators-user-img me-3"><img src="images/items/item_1.html" alt=""
                                             width="60"></div>
                                     <div class="top-creators-info">
-                                        <h5 class="mb-0">Terry Camacho</h5>
-                                        <p class="mb-2">60 Items</p>
+                                        <h5 class="mb-0">{{history.type}}</h5>
+                                        <p class="mb-2">{{history.status}}</p>
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <h5 class="text-primary">0.2658 ETH</h5>
+                                    <h5 class="text-primary">{{history.amount}} ETH</h5>
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="card-body bs-0 p-0 top-creators-content  bg-transparent">
+                            <div class="d-flex justify-content-between creator-widget active  align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="top-creators-user-img me-3"><img src="images/items/item_1.html" alt=""
+                                            width="60"></div>
+                                    <div class="top-creators-info">
+                                        <h5 class="mb-0 text-center">You've made no transaction yet!</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 
