@@ -29,7 +29,6 @@ logForm.addEventListener("submit", (e) => {
         data: logData,
         success: function(resp){
             //
-            console.log(resp);
             $("#submitbtn").val("Login Account");
             if(resp.success == true){
                 location.href = resp['data'].redirectURL;

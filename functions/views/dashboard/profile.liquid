@@ -1,4 +1,32 @@
 {% include 'dashboard/partials/header.liquid' %}
+<style>
+    .badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+</style>
 {% include 'dashboard/partials/sidebar.liquid' %}
 
     <div class="content-body">
@@ -55,17 +83,29 @@
                         </div>
                         <div class="card-body bs-0 p-0 bg-transparent">
                             <div class="row">
+                                {% if bids %}
+                                {% for bid in bids %}
                                 <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                     <div class="card items">
                                         <div class="card-body">
-                                            <div class="items-img position-relative"><img src="images/items/1.jpg"
+                                            <div class="items-img position-relative"><img src="{{bid.nftUrl}}"
                                                     class="img-fluid rounded mb-3" alt=""><img
-                                                    src="images/avatar/1.jpg" class="creator" width="50" alt=""></div>
-                                            <h4 class="card-title">Liguid Wave</h4>
+                                                    src="{{bid.nftUrl}}" class="creator" width="50" alt=""></div>
+                                            <h4 class="card-title">{{bid.nftName}}</h4> 
+                                            {% if bid.iscompleted == "yes" %}
+                                            <span class="badge badge-danger p-2">Sold Out</span>
+                                            {% endif %}
+                                            {% if bid.iscompleted == false %}
+                                            <span class="badge badge-info p-2">Autioning</span>
+                                            {% endif %}
+                                            {% if bid.iscompleted == true %}
+                                            <span class="badge badge-success p-2">Owned</span>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
-                               
+                                {% endfor %}
+                               {% endif %}
                             </div>
                         </div>
                     </div>

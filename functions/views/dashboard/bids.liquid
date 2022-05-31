@@ -57,8 +57,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header flex-row">
-                            <h4 class="card-title">Active Bids </h4><a class="btn btn-primary"
-                                href="create-invoice.html">Place a Bid</a>
+                            <h4 class="card-title">Active Bids </h4>
                         </div>
                         <div class="card-body p-0 bs-0 bg-transparent">
                             <div class="bid-table">
@@ -75,27 +74,42 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% if bids %}
+                                            {% for bid in bids %}
                                             <tr>
                                                 <td>
                                                     <div class="d-flex align-items-center"><img
-                                                            src="images/items/15.jpg" alt="" width="60"
+                                                            src="{{bid.nftUrl}}" alt="" width="60"
                                                             class="me-3 rounded">
                                                         <div class="flex-grow-1">
-                                                            <h6 class="mb-0">Cutes Cube Cool</h6>
-                                                            <p class="mb-0">John Abraham</p>
+                                                            <h6 class="mb-0">{{bid.nftName}}</h6>
+                                                            <p class="mb-0">{{bid.date}}</p>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>0.0025 ETH</td>
-                                                <td> 0.0025 ETH</td>
+                                                <td>{{bid.startBid}} ETH</td>
+                                                <td> {{bid.placedBid}} ETH</td>
                                                 <td><img src="images/avatar/1.jpg" alt="" width="40"
-                                                        class="me-2 rounded-circle">0.0025 ETH</td>
-                                                <td>3 Days</td>
+                                                        class="me-2 rounded-circle">{{bid.profitexp}} ETH</td>
+                                                <td>{{bid.duration}}</td>
+                                                {% if bid.iscompleted == false %}
                                                 <td>
-                                                    <a href="/withdraw?token={{token}}" class="btn btn-success" style="margin-right: 2px;">Flip Art</a>
+                                                    <a href="javascript:void(0)" class="btn btn-warning" style="margin-right: 2px;">{{bid.status}}</a>
                                                 </td>
+                                                {% endif %}
+                                                {% if bid.iscompleted == true %}
+                                                <td>
+                                                    <a href="javascript:void(0)" onclick="flipArt('{{bid.bid}}', this)" class="btn btn-success" style="margin-right: 2px;">Flip Art</a>
+                                                </td>
+                                                {% endif %}
+                                                {% if bid.iscompleted == "yes" %}
+                                                <td>
+                                                    <a href="javascript:void(0)" class="btn btn-info" style="margin-right: 2px;">Art Fliped</a>
+                                                </td>
+                                                {% endif %}
                                             </tr>
-                                           
+                                            {% endfor %}
+                                           {% endif %}
                                         </tbody>
                                     </table>
                                 </div>
