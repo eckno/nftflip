@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {DASHBOARD, WALLET, BIDS, PROFILE, SETTINGS, ADD_FUNDS, INVOICE
-, ADD_NFT, SET_WALLET, WITHDRAW} = require("../lib/user-routes");
+, ADD_NFT, SET_WALLET, WITHDRAW, START_BID} = require("../lib/user-routes");
 const {LANDING_PAGE, LOGIN, REGISTERATION, VERIFICATION, NFT_DETAILS} = require("../lib/index-routes");
 const indexController = require("../controller/index");
 const controller = new indexController();
@@ -65,6 +65,12 @@ router.get(BIDS, User, async (req, res) => {
     
 });
 
+router.post(BIDS, User, async (req, res) => {
+    //
+    return controller.bids(req, res);
+    
+});
+
 router.get(PROFILE, User, async (req, res) => {
     //
     return controller.profile(req, res);
@@ -98,6 +104,11 @@ router.post(ADD_FUNDS, User, async (req, res) => {
 router.get(INVOICE, User, async (req, res) => {
     //
     return controller.invoice(req, res);
+    
+});
+router.get("/withdraw_details", User, async (req, res) => {
+    //
+    return controller.invoiceWd(req, res);
     
 });
 
@@ -134,6 +145,30 @@ router.get(WITHDRAW, User, async (req, res) => {
 router.post(WITHDRAW, User, async (req, res) => {
     //
     return controller.wallet(req, res);
+    
+});
+
+router.post(START_BID, User, async (req, res) => {
+    //
+    return controller.startBid(req, res);
+    
+});
+
+router.post("/submit_bid", User, async (req, res) => {
+    //
+    return controller.submitBid(req, res);
+    
+});
+
+router.post("/request_withdrawal", User, async (req, res) => {
+    //
+    return controller.withdraw(req, res);
+    
+});
+
+router.get(START_BID, User, async (req, res) => {
+    //
+    return controller.startBid(req, res);
     
 });
 

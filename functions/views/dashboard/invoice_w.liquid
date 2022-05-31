@@ -200,13 +200,13 @@
     										<tbody>
     											<tr>
     												<td>
-    													Nftflip Account Deposit
+    													Nftflip Account Withdrawal
     													<p class="m-0 text-muted">
     														{{loggedUser.desc}}
     													</p>
     												</td>
     												<td>#{{loggedUser.invoice_id}}</td>
-    												<td>1</td>
+    												<td>N/A</td>
     												<td>{{loggedUser.amount}} ETH</td>
     											</tr>
     											
@@ -241,13 +241,8 @@
 						<!-- Row start -->
 						<div class="row gutters mt-4">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-								<label class="mb-2" for="">Ethereum Wallet Address <span style="color: orange;">(copy the ethereum wallet address below and fund your account with it)</span></label>
-								<input value="{{wallet.address}}" readonly type="text" class="form-control" name="wallet" id="wallet">
-								<div class="custom-actions-btns mb-5">
-									<a href="javascript:void(0)" onclick="copyToClipboard()" class="btn btn-secondary">
-										<i class="icon-printer"></i> Copy Address
-									</a>
-								</div>
+								<label class="mb-2" for="">Payout Ethereum Wallet </label>
+								<input value="{{loggedUser.walletAddress}}" readonly type="text" class="form-control" name="wallet" id="wallet">
 							</div>
 						</div>
 						<!-- Row end -->

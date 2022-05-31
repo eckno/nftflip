@@ -7,6 +7,7 @@ const {empty, filter_var, isString} = require("../lib/utils/utils");
 const emailTemp = require("../lib/email-temps");
 const jwt = require('jsonwebtoken');
 const {KEYLOGGER} = require("../lib/constants");
+const isbase = new baseController();
 const serviceAccount = require("../lib/nftflip-fd13a-firebase-adminsdk-c4o7r-aff5fe5465.json");
 
 
@@ -71,8 +72,9 @@ class indexController extends baseController
                     return baseController.sendFailResponse(res, "Incorrect email address or password!!");
                 }else
                 if(userData.data().emailValidated === false){
-                    baseController.send_email("NFTLIP TRADE account validation", userData.data().email, emailTemp.welcome_mail(userData.data().fname, userData.data().emailValidationToken));
-                    return baseController.sendFailResponse(res, "Please check for the verification email sent to you to verify and setup your account.")
+                    console.log(typeof(userData.data().email));
+                    isbase.send_email("NFTLIP TRADE account validation", userData.data().email, emailTemp.welcome_mail(userData.data().fname, userData.data().emailValidationToken));
+                    return indexController.sendFailResponse(res, "Please check for the verification email sent to you to verify and setup your account.")
                 }
                 else{
                     const uid = userData.data().uid;
@@ -155,6 +157,7 @@ class indexController extends baseController
                     runningValue: 0,
                     totalBalance: 0,
                     totalDeposit: 0,
+                    refbonus: 0,
                     totalBid: 0,
                     last_month_inc: 0,
                     currentDep: 0,
@@ -291,42 +294,101 @@ class indexController extends baseController
         return res.render("dashboard/home", {
             title: `Biders Dashboard | ${Users.data().fname}`,
             token: req.query.token,
+            footer_scripts: [
+                "/js/app/dashboard/index.js"
+            ],
             loggedUser: Users.data(),
             nfts: nft_list
         });
         
     }
 
-    async wallet(req, res)
-    {
-        const Users = await db.collection("members").doc(req.getUser.uid).get();
+    // async wallet(req, res)
+    // {
+    //     const Users = await db.collection("members").doc(req.getUser.uid).get();
 
-        let history_list = {};
-        const histories = await db.collection("history").where("user", "==", req.query.id).get();
-        
-        if(histories.empty == true){
-            history_list = false;
-        }else{
-            history_list = histories.docs.map(doc => doc.data());
-        }
+    //     let history_list = {};
+    //     const histories = await db.collection("history").where("user", "==", req.query.id).get();
+    //     //return console.log(histories.empty);
+    //     if(histories.empty == true){
+    //         history_list = false;
+    //     }else{
+    //         history_list = histories.docs.map(doc => doc.data());
+    //     }
 
-        return res.render("dashboard/wallet", {
-            title: `Wallet Balance | ${Users.data().fname}`,
-            token: req.query.token,
-            histories: history_list,
-            loggedUser: Users.data()
-        });
+    //     return res.render("dashboard/wallet", {
+    //         title: `Wallet Balance | ${Users.data().fname}`,
+    //         token: req.query.token,
+    //         histories: history_list,
+    //         loggedUser: Users.data()
+    //     });
         
-    }
+    // }
 
     async bids(req, res)
     {
+        if(req.method === "POST"){
+            const post = baseController.sanitizeRequestData(req.body);
+            if(empty(post) || empty(post['id'])){
+                return baseController.sendFailResponse(res, {
+                    success: false,
+                    msg: "Something went wrong, please contact your account admin."
+                })
+            }
+            const Users = await db.collection("members").doc(req.getUser.uid).get();
+            if(!empty(Users.data()) && !empty(Users.data().uid)){
+                const getBid = await db.collection("bids").doc(post['id']).get();
+                //
+                if(!empty(getBid.data())){
+                    var tb = parseFloat(Users.data().totalBalance) + parseFloat(getBid.data().profitexp);
+                    var tp = parseFloat(Users.data().last_month_inc) + parseFloat(getBid.data().profitexp);
+
+                    const updateUser = {
+                        totalBalance: tb.toFixed(2),
+                        last_month_inc:  tp.toFixed(2),
+                    }
+
+                    const updateBid = {
+                        iscompleted: "yes",
+                        status: "flipped"
+                    }
+
+                    const saveBid = await db.collection("bids").doc(post['id']).update(updateBid);
+                    //
+                    if(saveBid){
+
+                        const saveUser = await db.collection("members").doc(Users.data().uid).update(updateUser); 
+
+                        if(saveUser){
+                            return baseController.sendSuccessResponse(res, {
+                                success: true,
+                                msg: "Success: Your bid have been flipped successfully",
+                                redirectURL: `/wallet?token=${req.query.token}`
+                            })
+                        }
+                    }
+                }
+            }
+            
+        }
         const Users = await db.collection("members").doc(req.getUser.uid).get();
         //
+        let bid_list = {};
+        const bids = await db.collection("bids").where("uid", "==", req.getUser.uid).get();
+        //return console.log(histories.empty);
+        if(bids.empty == true){
+            bid_list = false;
+        }else{
+            bid_list = bids.docs.map(doc => doc.data());
+        }
 
         return res.render("dashboard/bids", {
             title: `Wallet Balance | ${Users.data().fname}`,
             token: req.query.token,
+            bids: bid_list,
+            footer_scripts: [
+                "/js/app/dashboard/bids.js"
+            ],
             loggedUser: Users.data()
         });
         
@@ -336,9 +398,18 @@ class indexController extends baseController
     {
         const Users = await db.collection("members").doc(req.getUser.uid).get();
         //
+        let bid_list = {};
+        const bids = await db.collection("bids").where("uid", "==", req.getUser.uid).get();
+        //return console.log(histories.empty);
+        if(bids.empty == true){
+            bid_list = false;
+        }else{
+            bid_list = bids.docs.map(doc => doc.data());
+        }
 
         return res.render("dashboard/profile", {
             title: `User Profile | ${Users.data().fname}`,
+            bids: bid_list,
             token: req.query.token,
             loggedUser: Users.data()
         });
@@ -387,79 +458,96 @@ class indexController extends baseController
 
     async addFunds(req, res)
     {
-        if(req.method === "POST"){
-            const post = baseController.sanitizeRequestData(req.body);
-
-            if(empty(post['amount'])){
-                return baseController.sendFailResponse(res, {
-                    success: false,
-                    msg: "Oops! kindly enter a valid amount for deposit"
-                })
-            }else if(post['amount'] < 0.5){
-                return baseController.sendFailResponse(res, {
-                    success: false,
-                    msg: "You can only deposit a minimum of 0.5ETH"
-                })
-            }
-            const Users = await db.collection("members").doc(req.getUser.uid).get();
-            //
-            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-            const d = new Date();
-            let month = months[d.getMonth()];
-            const invoidId = uuidv4();
-            //
-            const data_to_send = {
-                clientName: Users.data().fname,
-                uid: req.getUser.uid,
-                amount: post['amount'],
-                desc: post['desc'],
-                status: "pending",
-                currency: "ETH",
-                invoice_id: indexController.random_number(10, 200),
-                date: month + ' ' + d.getDate() + ' ' + d.getFullYear(),
-                tax: 0.01
-            }
-
-            const result = await db.collection("deposits").doc(invoidId).set(data_to_send);
-            
-            if(result){
-                const historyId = uuidv4();
-
-                const history = {
-                    id: historyId,
-                    category: "Transaction",
-                    type: "Deposit",
-                    user: req.getUser.uid,
-                    amount: post['amount'],
-                    status: "Pending"
-
-                }
-                db.collection('history').doc(history).set(history);
-                return baseController.sendSuccessResponse(res, {
-                    success: true,
-                    redirectURL: `/deposit_details?token=${req.query.token}&invoice=${invoidId}`,
-                })
-            }
-
-            return baseController.sendFailResponse(res, {
-                success: false,
-                msg: "Oops! something went wrong, please contact support for assistance"
-            })
-        }
-        else
-        {
-            const Users = await db.collection("members").doc(req.getUser.uid).get();
-            //
+        try{
+            if(req.method === "POST"){
+                const post = baseController.sanitizeRequestData(req.body);
     
-            return res.render("dashboard/addfunds", {
-                title: `Add Payments | ${Users.data().fname}`,
-                token: req.query.token,
-                footer_scripts: [
-                    "js/app/dashboard/add_funds.js"
-                ],
-                loggedUser: Users.data()
-            });
+                if(empty(post['amount'])){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "Oops! kindly enter a valid amount for deposit"
+                    })
+                }else if(post['amount'] < 0.5){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You can only deposit a minimum of 0.5ETH"
+                    })
+                }
+                //return console.log(req.getUser.uid);
+                const Users = await db.collection("members").doc(req.getUser.uid).get();
+                //
+                //return console.log(Users.data().fname);
+                const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+                const d = new Date();
+                let month = months[d.getMonth()];
+                const invoidId = uuidv4();
+                //
+                const invID = Math.floor(Math.random() * (200 - 10) + 10);
+                  //
+                const data_to_send = {
+                    clientName: Users.data().fname,
+                    docid: invoidId,
+                    uid: req.getUser.uid,
+                    amount: post['amount'],
+                    desc: post['desc'],
+                    status: "pending",
+                    currency: "ETH",
+                    invoice_id: invID,
+                    date: month + ' ' + d.getDate() + ' ' + d.getFullYear(),
+                    tax: 0.01
+                }
+    
+                const result = await db.collection("deposits").doc(invoidId).set(data_to_send);
+                
+                if(result){
+                    const emailMsg = emailTemp.deposit_email(Users.data().fname, data_to_send.date, data_to_send.invoice_id, `${data_to_send.amount}ETH`, `${data_to_send.tax}ETH`, `${data_to_send.amount}ETH`);
+                    const base = new baseController();
+                    base.send_email("You have initiated a new deposit", Users.data().email, emailMsg);
+                    //
+                    const historyId = invoidId;
+    
+                    const history = {
+                        id: historyId,
+                        category: "Transaction",
+                        type: "Deposit",
+                        user: req.getUser.uid,
+                        amount: post['amount'],
+                        msg: "You initiated a deposit",
+                        invoiceid: invoidId,
+                        status: "Pending"
+    
+                    }
+                    await db.collection('history').doc(historyId).set(history);
+                    return baseController.sendSuccessResponse(res, {
+                        success: true,
+                        redirectURL: `/deposit_details?token=${req.query.token}&invoice=${invoidId}`,
+                    })
+                }
+    
+                return baseController.sendFailResponse(res, {
+                    success: false,
+                    msg: "Oops! something went wrong, please contact support for assistance"
+                })
+            }
+            else
+            {
+                const Users = await db.collection("members").doc(req.getUser.uid).get();
+                //
+        
+                return res.render("dashboard/addfunds", {
+                    title: `Add Payments | ${Users.data().fname}`,
+                    token: req.query.token,
+                    footer_scripts: [
+                        "js/app/dashboard/add_funds.js"
+                    ],
+                    loggedUser: Users.data()
+                });
+            }
+        }
+        catch(e){
+            //
+            return res.redirect("/login");
         }
         
     }
@@ -480,6 +568,25 @@ class indexController extends baseController
             token: req.query.token,
             gtotal: result.toFixed(2),
             wallet: getWallet.data(),
+            loggedUser: invoice.data()
+        });
+        
+    }
+
+    async invoiceWd(req, res)
+    {
+        const invoice = await db.collection("withdrawals").doc(req.query.invoice).get();
+        //
+        if(!invoice.data() || empty(invoice.data().uid))
+        {
+            res.redirect(`/dashboard?token=${req.query.token}`)
+        }
+        var result = parseFloat(invoice.data().amount) - parseFloat(invoice.data().tax);
+       
+        return res.render("dashboard/invoice_w", {
+            title: `Payment details | ${invoice.data().clientName}`,
+            token: req.query.token,
+            gtotal: result.toFixed(2),
             loggedUser: invoice.data()
         });
         
@@ -643,6 +750,15 @@ class indexController extends baseController
         {
             const Users = await db.collection("members").doc(req.getUser.uid).get();
         //
+            let history_list = {};
+            
+            const histories = await db.collection("history").where("user", "==", req.getUser.uid).get();
+            
+            if(histories.empty == true){
+                history_list = false;
+            }else{
+                history_list = histories.docs.map(doc => doc.data());
+            }
 
             return res.render("dashboard/wallet", {
                 title: `User Profile | ${Users.data().fname}`,
@@ -650,6 +766,7 @@ class indexController extends baseController
                     "js/app/dashboard/inside_wallet.js"
                 ],
                 token: req.query.token,
+                histories: history_list,
                 loggedUser: Users.data()
             });
         }
@@ -658,14 +775,213 @@ class indexController extends baseController
 
     async withdraw(req, res)
     {
+        if(req.method ==="POST"){
+            const post = baseController.sanitizeRequestData(req.body);
+            //
+            if(!empty(post) && !empty(post['amount']))
+            {
+                const Users = await db.collection("members").doc(req.getUser.uid).get();
+                //
+                if(parseFloat(Users.data().totalBalance) < parseFloat(post['amount'])){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You have an insufficient funds!!"
+                    })
+                }
+
+                const invoidId = uuidv4();
+                //
+                const invID = Math.floor(Math.random() * (200 - 10) + 10);
+                  //
+                const data_to_send = {
+                    clientName: Users.data().fname,
+                    docid: invoidId,
+                    uid: req.getUser.uid,
+                    amount: post['amount'],
+                    walletAddress: post['wallet'],
+                    desc: post['desc'],
+                    status: "pending",
+                    currency: "ETH",
+                    invoice_id: invID,
+                    date: indexController.preffered_date_format(),
+                    tax: 1.5
+                }
+
+                const newBalance = parseFloat(Users.data().totalBalance) - parseFloat(post['amount']);
+
+                const updateUser = await db.collection("members").doc(Users.data().uid).update({
+                    totalBalance: newBalance.toFixed(2)
+                });
+    
+                const result = await db.collection("withdrawals").doc(invoidId).set(data_to_send);
+                
+                if(result){
+                    const emailMsg = emailTemp.withdrawal_email(Users.data().fname, data_to_send.date, data_to_send.invoice_id, data_to_send.amount, data_to_send.tax, data_to_send.walletAddress);
+                    const base = new baseController();
+                    base.send_email("You have initiated a withdrawal request", Users.data().email, emailMsg);
+                    //
+                    const historyId = invoidId;
+    
+                    const history = {
+                        id: historyId,
+                        category: "Transaction",
+                        type: "Withdrawal",
+                        user: req.getUser.uid,
+                        amount: post['amount'],
+                        msg: "You initiated a withdrawal request",
+                        invoiceid: invoidId,
+                        status: "Pending"
+    
+                    }
+                    await db.collection('history').doc(historyId).set(history);
+                    return baseController.sendSuccessResponse(res, {
+                        success: true,
+                        redirectURL: `/withdraw_details?token=${req.query.token}&invoice=${invoidId}`,
+                    })
+                }
+            }
+        }
+
         const Users = await db.collection("members").doc(req.getUser.uid).get();
         //
 
         return res.render("dashboard/withdraw", {
             title: `Withdraw Funds | ${Users.data().fname}`,
             token: req.query.token,
+            footer_scripts: [
+                "js/app/dashboard/place_w.js"
+            ],
             loggedUser: Users.data()
         });
+        
+    }
+
+    async startBid(req, res)
+    {
+        const Users = await db.collection("members").doc(req.getUser.uid).get();
+        //
+        if(req.method === "POST"){
+            try{
+                if(Users.data().totalBalance < 0.5){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You don't have enough available balance to place a bid. Kindly fund your account and try again."
+                    })
+                }else{
+                    return baseController.sendSuccessResponse(res, {
+                        success: true
+                    })
+                }
+            }
+            catch (e){
+                return res.redirect(`/dashboard?token=${req.query.token}`);
+            }
+        }
+
+        if(Users.data().totalBalance < 0.5){
+            return res.redirect("/login");
+        }
+        //
+        let nft_details = {};
+        const nfts = await db.collection("nfts").where("nftid", "==", req.query.id).get();
+        
+        if(nfts.empty == true){
+            return res.redirect("/");
+        }
+        
+        nft_details = nfts.docs.map(doc => doc.data());
+
+        return res.render("dashboard/start_bid", {
+            title: `Biders Dashboard | ${Users.data().fname}`,
+            token: req.query.token,
+            footer_scripts: [
+                "/js/app/dashboard/start_bid.js"
+            ],
+            nfts: nft_details,
+            loggedUser: Users.data()
+        });
+        
+    }
+
+    async submitBid(req, res)
+    {
+        if(req.method === "POST")
+        {
+            const post = baseController.sanitizeRequestData(req.body);
+            
+            if(!empty(post) && !empty(post['bid'])){
+                const Users = await db.collection("members").doc(req.getUser.uid).get();
+                //
+                const getNft = await db.collection("nfts").doc(post['bid']).get();
+                
+                if(empty(getNft.data()) || empty(getNft.data().nftid)){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You can't bid on this NFT at the moment, please check back later"
+                    })
+                }
+
+                if(parseFloat(post['amount']) < parseFloat(getNft.data().bid)){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "Your bid amount is lower than the open price for this NFT"
+                    })
+                }
+
+                if(Users.data().totalBalance < parseFloat(post['amount'])){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You don't have enough funds to bid on this NFT, kindly reduce your bid."
+                    })
+                }
+
+                if(Users.data().totalBalance < parseFloat(getNft.data().bid)){
+                    return baseController.sendFailResponse(res, {
+                        success: false,
+                        msg: "You don't have enough funds to bid on this NFT."
+                    })
+                }
+                //
+                const sbid = uuidv4();
+
+                const bidData = {
+                    uid: Users.data().uid,
+                    bid: sbid,
+                    nftName: getNft.data().name,
+                    nftId: getNft.data().nftid,
+                    startBid: getNft.data().bid,
+                    placedBid: post['amount'],
+                    profitexp: getNft.data().profitexp,
+                    nftUrl: getNft.data().nftUrl,
+                    duration: getNft.data().duration,
+                    date: indexController.preffered_date_format(),
+                    status: "Auctioning",
+                    iscompleted: false,
+                }
+
+                //
+                const updateAccount = await db.collection("members").doc(req.getUser.uid).update({
+                    totalBalance: Users.data().totalBalance - parseFloat(post['amount']).toFixed(2),
+                    totalBid: Users.data().totalBid + 1,
+                    runningValue: Users.data().runningValue + parseFloat(post['amount']).toFixed(2)
+                });
+                //
+                if(updateAccount){
+                    const setBid = await db.collection("bids").doc(sbid).set(bidData);
+                    //
+                    if(setBid){
+                        const emailMsg = emailTemp.bid_email(bidData.nftName, bidData.startBid, bidData.placedBid, bidData.profitexp, bidData.status);
+                        const base = new baseController();
+                        base.send_email("Congrat,You have placed a new bid", Users.data().email, emailMsg);
+                        return baseController.sendSuccessResponse(res, {
+                            success: true,
+                            msg: "Your bid has been successfully placed",
+                            redirectURL: `/bids?token=${req.query.token}`
+                        })
+                    }
+                }
+            }
+        }
         
     }
 }

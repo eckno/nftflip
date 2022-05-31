@@ -2,7 +2,7 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
   });
 
-const setform = document.getElementById("profileForm");
+const setform = document.getElementById("profitForm");
 const setformBtn = document.getElementById("profileFormBtn");
 
 setform.addEventListener("submit", e => {
@@ -11,24 +11,24 @@ setform.addEventListener("submit", e => {
 
     const amount = setform['amount'].value;
     const desc = setform['desc'].value;
+    const wallet = setform['wallet'].value;
     
     //
     const send_data = {
         amount,
-        desc
+        desc,
+        wallet
     }
 
     $.ajax({
         type: "POST",
-        url: `/add_funds?token=${params.token}`,
+        url: `/request_withdrawal?token=${params.token}`,
         data: send_data,
         dataType: "JSON",
         success: function (resp){
-            setformBtn.innerHTML ="Add Funds";
+            setformBtn.innerHTML ="Withdraw";
             if(resp.success == true){
                 //
-                setformBtn.innerHTML =`<div class="spinner spinner-border-sm spinner-border"></div>Generating wallet...`;
-                
                 setTimeout(() => {
                   //
                   location.href = resp['data'].redirectURL;
@@ -38,7 +38,7 @@ setform.addEventListener("submit", e => {
             console.log(resp);
         },
         error: function (err){
-            setformBtn.innerHTML ="Add Funds";
+            setformBtn.innerHTML ="Withdraw";
             console.log(err);
             if(err.responseJSON.errors.success == false){
                 Swal.fire({

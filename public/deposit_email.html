@@ -156,7 +156,7 @@
                     <td height="35" class="em_height">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:20px; font-weight:bold; line-height:18px; color:#999999;text-transform: capitalize;">Dear, &lt;Firstname&gt; </td>
+                    <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:20px; font-weight:bold; line-height:18px; color:#999999;text-transform: capitalize;">Dear, ${fname} </td>
                   </tr>
                   <tr>
                     <td height="22" style="font-size:1px; line-height:1px;">&nbsp;</td>
@@ -172,7 +172,7 @@
                     <td height="38" style="font-size:1px; line-height:1px;">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;"><strong style="color: #feae39;text-transform: capitalize;">deposit date: </strong>{{deposit_date}} 
+                    <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;"><strong style="color: #feae39;text-transform: capitalize;">deposit date: </strong>${date} 
                       
                     </td>
                   </tr>
@@ -181,7 +181,7 @@
                   </tr>
                   <tr>
                      <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;">
-                       <strong style="color: #feae39;text-transform: capitalize;"> credited to :</strong> {{user_wallet}} 
+                       <strong style="color: #feae39;text-transform: capitalize;"> credited to :</strong> ${cto} 
                     </td>
                   </tr>
                   <tr>
@@ -189,7 +189,7 @@
                   </tr>
                   <tr>
                      <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;">
-                      <strong style="color: #feae39;text-transform: capitalize;">Deposit amount: </strong> {{deposit_amount}}
+                      <strong style="color: #feae39;text-transform: capitalize;">Deposit amount: </strong> ${amount}
                     </td>
                   </tr>
                   <tr>
@@ -197,7 +197,7 @@
                   </tr>
                   <tr>
                     <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;">
-                     <strong style="color: #feae39;text-transform: capitalize;">Fee:  </strong> {{fee}}
+                     <strong style="color: #feae39;text-transform: capitalize;">Fee:  </strong> ${tax}
                    </td>
                  </tr>
                  <tr>
@@ -205,18 +205,13 @@
                  </tr>
                  <tr>
                     <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;">
-                     <strong style="color: #feae39;text-transform: capitalize;">Total charged: </strong> {{total_charged}}
+                     <strong style="color: #feae39;text-transform: capitalize;">Total charged: </strong> ${total}
                    </td>
                  </tr>
                  <tr>
                    <td height="20" style="font-size:1px; line-height:1px;">&nbsp;</td>
                  </tr>
-                  <tr>
-                    <td align="left" style="font-family:'Open Sans', Arial, sans-serif; font-size:18px; line-height:20px; color:#999999;font-weight: 600;"><strong style="color: #feae39;text-transform: capitalize;">Date : </strong>{{item_name}} 
-                      
-                    </td>
-                  </tr>
-            
+                  
                   <tr>
                     <tr>
                         <td height="52" style="font-size:1px; line-height:1px;">&nbsp;</td>
@@ -224,7 +219,7 @@
                     <td valign="top" align="center">
                       <table width="210" border="0" cellspacing="0" cellpadding="0" align="center">
                         <tr>
-                          <td valign="middle" align="center" height="45" bgcolor="#feae39" ><a href="" style="font-family:'Open Sans', Arial, sans-serif; font-size:17px; font-weight:bold; color:#ffffff;cursor: pointer; text-transform:uppercase;text-decoration: none;">Approve Deposit</a></td>
+                          <td valign="middle" align="center" height="45" bgcolor="#feae39" ><a href="mailto:support@nftflip.trade" style="font-family:'Open Sans', Arial, sans-serif; font-size:17px; font-weight:bold; color:#ffffff;cursor: pointer; text-transform:uppercase;text-decoration: none;">NOT YOUR ACTION ? REPORT</a></td>
                         </tr>
                       </table>
                     </td>
